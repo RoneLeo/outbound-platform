@@ -59,7 +59,7 @@
 				</view>
 			</view>
 			<view class="case-staus">
-				在案
+				已接单
 			</view>
 		</view>
 		<view class="page-block other-info">
@@ -114,6 +114,76 @@
 				</view>
 			</view>
 		</view>
+		<!-- <view class="block-title">
+			本次催单记录
+		</view> -->
+		<view class="page-block task-info record-block">
+			<view class="block-name">
+				本次催单记录表
+			</view>
+			<view class="record-list">
+				<view class="record-item">
+					<view class="record-item-tt over-text">定 位</view>
+					<view class="record-item-td">
+						<view style="float: right;padding-right: 20upx;color: #00C674;">获取定位</view>
+					</view>
+				</view>
+				<view class="record-item">
+					<view class="record-item-tt over-text">图 片</view>
+					<view class="record-item-td media-wrapper">
+						<image src="../../static/indexPng/photo.png" class="img-media"></image>
+						<image src="../../static/indexPng/bg.jpeg" class="img-media"></image>
+						<image src="../../static/indexPng/bg.jpeg" class="img-media"></image>
+						<image src="../../static/indexPng/bg.jpeg" class="img-media"></image>
+						<image src="../../static/indexPng/bg.jpeg" class="img-media"></image>
+					</view>
+				</view>
+				<view class="record-item">
+					<view class="record-item-tt over-text">录 音</view>
+					<view class="record-item-td media-wrapper">
+						<view class="audio-media">
+							<image src="../../static/icon/play.png" class="audio-icon"></image>
+							<view class="audio-progress">
+								<progress percent="20" stroke-width="3" activeColor="#ffffff" backgroundColor="#aaaaaa" />
+							</view>
+							<view class="audio-length">3:50</view>
+						</view>
+						<view class="audio-media">
+							<image src="../../static/icon/play.png" class="audio-icon"></image>
+							<view class="audio-progress">
+								<progress percent="20" stroke-width="3" activeColor="#ffffff" backgroundColor="#aaaaaa" />
+							</view>
+							<view class="audio-length">3:50</view>
+						</view>
+						<view class="audio-media">
+							<image src="../../static/icon/play.png" class="audio-icon"></image>
+							<view class="audio-progress">
+								<progress percent="20" stroke-width="3" activeColor="#ffffff" backgroundColor="#bbbbbb" />
+							</view>
+							<view class="audio-length">3:50</view>
+						</view>
+					</view>
+				</view>
+				<view class="record-item">
+					<view class="record-item-tt over-text">视 频</view>
+					<view class="record-item-td media-wrapper">
+						<view class="video-media">
+							<video src="https://www.itzixi.com:99/superhero/MARVEL/Thor3/trailer.mp4" controls></video>
+						</view>
+						<view class="video-media">
+							<video src="https://www.itzixi.com:99/superhero/MARVEL/SpiderManHomecoming/trailer.mp4" controls></video>
+						</view>
+					</view>
+				</view>
+				<view class="record-item">
+					<view class="record-item-tt over-text">记 录</view>
+					<view class="record-item-td">
+						<textarea value="" placeholder="请填写本次记录" auto-height cursor-spacing="10px" />
+						<!-- <input type="text" value="" placeholder="请填写" /> -->
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -127,7 +197,7 @@
 			toolbarShow: false,
 		},
 		onLoad(params) {
-			console.log(params, params.caseId)
+			console.log(params, params.taskId)
 		},
 		methods:{
 			tabchange(index, e) {

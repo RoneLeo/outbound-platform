@@ -1,6 +1,6 @@
 .cicle-toolbar {
 	position: fixed;
-	bottom: 30%;
+	bottom: 5%;
 	right: 3%;
 	display: flex;
 	flex-direction: column;
@@ -10,6 +10,7 @@
 	height: 100upx;
 	border-radius: 50upx;
 	background:linear-gradient(to bottom, #66CC66,#00B07B);
+	z-index: 2000;
 }
 .toolbar {
 	position: fixed;
@@ -22,6 +23,7 @@
 	padding: 40upx 10upx 20upx 10upx;
 	border-radius: 40upx;
 	background:linear-gradient(to bottom, #66CC66,#00B07B);
+	z-index: 2000;
 }
 .toolbar-item {
 	display: flex;
@@ -175,7 +177,14 @@
 
 
 .task-info {
+	margin-top: 30upx;
 	
+}
+.block-name {
+	font-size: 16px;
+	font-weight: 500;
+	padding:20upx;
+	color: #333333;
 }
 .block-title {
 	margin-top: 20upx;
@@ -185,5 +194,76 @@
 	line-height: 20px;
 }
 .task-list {
-	padding: 20upx;
+	padding: 10upx 20upx;
+}
+
+/* 催单 */
+.record-list {
+	padding: 10upx 20upx 30upx;
+}
+.record-item {
+	padding: 20upx 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	font-size: 14px;
+	/* border-bottom: 1px solid #f5f5f5; */
+}
+.record-item-tt {
+	/* align-self: center; */
+	width: 100upx;
+	color: #333;
+	text-align: right;
+}
+.record-item-td {
+	align-self: center;
+	width: 590upx;
+	color: #777;
+}
+.media-wrapper {
+	/* padding: 0 20px; */
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+}
+.img-media {
+	width: 170upx;
+	height: 240upx;
+	padding: 10upx 5upx 0upx;
+	/* border-radius: 10upx; */
+}
+.audio-media {
+	width: 550upx;
+	padding: 15upx 10upx;
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+	background-color: #00B07B;
+	margin: 10upx 0;
+}
+.audio-icon {
+	align-self: center;
+	width: 35upx;
+	height: 35upx;
+}
+.audio-progress {
+	align-self: center;
+	width: 400upx;
+}
+.audio-length {
+	align-self: center;
+	width: 60upx;
+	color: #FFFFFF;
+	font-size: 14px;
+}
+
+.video-media {
+	width: 550upx;
+	height: 310upx;
+	padding: 15upx 10upx;
+	margin: 0upx 0 10upx;
+}
+video {
+	width: 100%;
+	height: 100%;
 }
