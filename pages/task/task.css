@@ -9,9 +9,10 @@
 	width: 100upx;
 	height: 100upx;
 	border-radius: 50upx;
-	background:linear-gradient(to bottom, #66CC66,#00B07B);
+	background: linear-gradient(to bottom, #66CC66, #00B07B);
 	z-index: 2000;
 }
+
 .toolbar {
 	position: fixed;
 	bottom: 5%;
@@ -22,9 +23,10 @@
 	justify-content: center;
 	padding: 40upx 10upx 20upx 10upx;
 	border-radius: 40upx;
-	background:linear-gradient(to bottom, #66CC66,#00B07B);
+	background: linear-gradient(to bottom, #66CC66, #00B07B);
 	z-index: 2000;
 }
+
 .toolbar-item {
 	display: flex;
 	flex-direction: column;
@@ -32,11 +34,13 @@
 	align-self: center;
 	margin: 15upx 0;
 }
+
 .toolbar-icon {
 	align-self: center;
 	width: 40upx;
 	height: 40upx;
 }
+
 .toolbar-text {
 	align-self: center;
 	color: #f2f2f2;
@@ -51,12 +55,14 @@
 	/* padding: 20upx; */
 	position: relative;
 }
+
 .basic-info {
 	padding: 30upx 20upx;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
 }
+
 .head-img-wrapper {
 	align-self: center;
 	border-radius: 50%;
@@ -67,10 +73,12 @@
 	justify-content: center;
 	align-items: center;
 }
+
 .head-img {
 	width: 120upx;
 	height: 120upx;
 }
+
 .head-info {
 	width: 520upx;
 	align-self: center;
@@ -78,12 +86,14 @@
 	flex-direction: column;
 	justify-content: flex-start;
 }
+
 .info-title {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
 	height: 70upx;
 }
+
 .info-data {
 	align-items: center;
 	color: #515151;
@@ -92,16 +102,20 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
 .info-name {
 	color: #222;
 	font-size: 16px;
 	font-weight: 500;
 	letter-spacing: 1px;
 }
-.info-age, .info-addr {
+
+.info-age,
+.info-addr {
 	color: #999;
 	margin-left: 20upx;
 }
+
 .data-wrapper {
 	height: 150upx;
 	border-top: 1px solid #f2f2f2;
@@ -110,6 +124,7 @@
 	flex-direction: row;
 	justify-content: space-around;
 }
+
 .data-item {
 	align-self: center;
 	display: flex;
@@ -119,15 +134,18 @@
 	font-size: 14px;
 	font-weight: 500;
 }
+
 .data-name {
 	color: #333;
 	line-height: 28px;
 }
+
 .data-num {
 	color: #00B07B;
 	line-height: 22px;
 	font-size: 16px;
 }
+
 .case-staus {
 	position: absolute;
 	top: 35upx;
@@ -151,9 +169,11 @@
 .other-info {
 	margin-top: 20upx;
 }
+
 .list-wrapper {
 	padding: 0 20upx;
 }
+
 .list-item {
 	padding: 20upx 0;
 	display: flex;
@@ -162,12 +182,14 @@
 	font-size: 14px;
 	/* border-bottom: 1px solid #f5f5f5; */
 }
+
 .list-item-tt {
 	align-self: center;
 	width: 180upx;
 	color: #333;
 	text-align: right;
 }
+
 .list-item-td {
 	align-self: center;
 	width: 510upx;
@@ -178,14 +200,16 @@
 
 .task-info {
 	margin-top: 30upx;
-	
 }
+
 .block-name {
 	font-size: 16px;
 	font-weight: 500;
-	padding:20upx;
+	padding: 30upx 30upx 20upx;
+	/* line-height: 30px; */
 	color: #333333;
 }
+
 .block-title {
 	margin-top: 20upx;
 	background-color: #f7f7f7;
@@ -193,14 +217,27 @@
 	padding: 20upx;
 	line-height: 20px;
 }
+
 .task-list {
 	padding: 10upx 20upx;
 }
 
 /* 催单 */
-.record-list {
-	padding: 10upx 20upx 30upx;
+.save-btn {
+	float: right;
+	padding-right: 20upx;
+	color: #FFFFFF;
+	padding: 5upx 32upx;
+	background: #00C674;
+	border-radius: 10upx;
+	font-size: 14px;
+	font-weight: 300;
 }
+
+.record-list {
+	padding: 10upx 20upx 40upx;
+}
+
 .record-item {
 	padding: 20upx 0;
 	display: flex;
@@ -209,29 +246,34 @@
 	font-size: 14px;
 	/* border-bottom: 1px solid #f5f5f5; */
 }
+
 .record-item-tt {
 	/* align-self: center; */
 	width: 100upx;
 	color: #333;
 	text-align: right;
 }
+
 .record-item-td {
 	align-self: center;
 	width: 590upx;
 	color: #777;
 }
+
 .media-wrapper {
 	/* padding: 0 20px; */
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-start;
 }
+
 .img-media {
 	width: 170upx;
 	height: 240upx;
 	padding: 10upx 5upx 0upx;
 	/* border-radius: 10upx; */
 }
+
 .audio-media {
 	width: 550upx;
 	padding: 15upx 10upx;
@@ -241,15 +283,18 @@
 	background-color: #00B07B;
 	margin: 10upx 0;
 }
+
 .audio-icon {
 	align-self: center;
 	width: 35upx;
 	height: 35upx;
 }
+
 .audio-progress {
 	align-self: center;
 	width: 400upx;
 }
+
 .audio-length {
 	align-self: center;
 	width: 60upx;
@@ -263,6 +308,7 @@
 	padding: 15upx 10upx;
 	margin: 0upx 0 10upx;
 }
+
 video {
 	width: 100%;
 	height: 100%;

@@ -4,51 +4,113 @@
         {
             "path" : "pages/index/index",
             "style" : {
-				"app-plus": {
-					"titleNView": false
-				}
+                "navigationBarTextStyle" : "black",
+                "navigationBarTitleText" : "追金侠",
+                "navigationBarBackgroundColor" : "#FFFFFF",
+                "backgroundColor" : "#FFFFFF",
+                "app-plus" : {
+                    "titleNView" : false
+                }
+            }
+        },
+        {
+            "path" : "pages/myCase/myCase",
+            "style" : {
+                "navigationBarTextStyle" : "white",
+                "navigationBarTitleText" : "我的案件",
+                "navigationBarBackgroundColor" : "#00C674",
+                "backgroundColor" : "#00C674",
+                "app-plus" : {
+                    "titleNView" : false
+                }
+            }
+        },
+        {
+            "path" : "pages/me/me",
+            "style" : {
+                "navigationBarTextStyle" : "white",
+                "navigationBarTitleText" : "我的",
+                "navigationBarBackgroundColor" : "#ffd655",
+                "backgroundColor" : "#ffd655",
+                "app-plus" : {
+                    "titleNView" : false
+                }
             }
         },
         {
             "path" : "pages/search/search",
-            "style" : {}
+            "style" : {
+                "app-plus" : {
+                    "titleNView" : false
+                }
+            }
         },
         {
-            "path" : "pages/me/me",
-            "style" : {}
+            "path" : "pages/case/case",
+            "style" : {
+                "app-plus" : {
+                    "titleNView" : false
+                },
+                "navigationBarTextStyle" : "white",
+                "navigationBarTitleText" : "案件详情",
+                "navigationBarBackgroundColor" : "#00C674",
+                "backgroundColor" : "#00C674"
+            }
+        },
+        {
+            "path" : "pages/task/task",
+            "style" : {
+                "app-plus" : {
+                    "titleNView" : false
+                },
+                "navigationBarTextStyle" : "white",
+                "navigationBarTitleText" : "任务详情",
+                "navigationBarBackgroundColor" : "#00C674",
+                "backgroundColor" : "#00C674"
+            }
+        },
+        {
+            "path" : "pages/setting/setting",
+            "style" : {
+				"navigationBarTextStyle" : "black",
+				"navigationBarTitleText" : "设置",
+				"navigationBarBackgroundColor" : "#FFFFFF",
+				"backgroundColor" : "#FFFFFF"
+			}
         }
     ],
-	"tabBar": {
-		"color":"#bfbfbf",
-		"selectedColor":"#515151",
-		"backgroundColor":"#ffffff",
-		"position": "bottom",
-		"borderStyle":"white",
-		"list": [   //最少两个，最多5个
-			{
-				"pagePath": "pages/index/index",
-				"text": "首页",
-				"iconPath":"static/tabBarIco/index.png",    //不支持网络图片
-				"selectedIconPath":"static/tabBarIco/index_sel.png"
-			},
-			{
-				"pagePath": "pages/search/search",
-				"text": "搜索",
-				"iconPath":"static/tabBarIco/search.png",    //不支持网络图片
-				"selectedIconPath":"static/tabBarIco/search_sel.png"
-			},
-			{
-				"pagePath": "pages/me/me",
-				"text": "我的",
-				"iconPath":"static/tabBarIco/me.png",    //不支持网络图片
-				"selectedIconPath":"static/tabBarIco/me_sel.png"
-			}
-		]
-	},
+    "tabBar" : {
+        "color" : "#bfbfbf",
+        "selectedColor" : "#515151",
+        "backgroundColor" : "#ffffff",
+        "position" : "bottom",
+        "borderStyle" : "white",
+        "list" : [
+            //最少两个，最多5个
+            {
+                "pagePath" : "pages/index/index",
+                "text" : "首页",
+                "iconPath" : "static/tabBarIco/index.png", //不支持网络图片
+                "selectedIconPath" : "static/tabBarIco/index_sel.png"
+            },
+            {
+                "pagePath" : "pages/myCase/myCase",
+                "text" : "案件",
+                "iconPath" : "static/tabBarIco/case.png", //不支持网络图片
+                "selectedIconPath" : "static/tabBarIco/case_sel.png"
+            },
+            {
+                "pagePath" : "pages/me/me",
+                "text" : "我的",
+                "iconPath" : "static/tabBarIco/me.png", //不支持网络图片
+                "selectedIconPath" : "static/tabBarIco/me_sel.png"
+            }
+        ]
+    },
     "globalStyle" : {
         "navigationBarTextStyle" : "black",
-        "navigationBarTitleText" : "超英预告",
-        "navigationBarBackgroundColor" : "#F8F8F8",
-        "backgroundColor" : "#F8F8F8"
+        "navigationBarTitleText" : "追金侠",
+        "navigationBarBackgroundColor" : "#FFFFFF",
+        "backgroundColor" : "#FFFFFF"
     }
 }

@@ -99,10 +99,14 @@
 				</view>
 			</view>
 		</view>
-		<view class="block-title">
+		<!-- <view class="block-title">
 			外访说明
-		</view>
+		</view> -->
 		<view class="page-block task-info">
+			<view class="block-name">
+				外访说明
+				
+			</view>
 			<view class="task-list">
 				<view class="list-item">
 					<view class="list-item-tt over-text">外访方式</view>
@@ -120,12 +124,14 @@
 		<view class="page-block task-info record-block">
 			<view class="block-name">
 				本次催单记录表
+				<view class="save-btn">上 传</view>
 			</view>
 			<view class="record-list">
 				<view class="record-item">
 					<view class="record-item-tt over-text">定 位</view>
 					<view class="record-item-td">
-						<view style="float: right;padding-right: 20upx;color: #00C674;">获取定位</view>
+						四川省成都市
+						<view style="float: right;padding-right: 20upx;color: #333;">获取定位</view>
 					</view>
 				</view>
 				<view class="record-item">
@@ -151,14 +157,14 @@
 						<view class="audio-media">
 							<image src="../../static/icon/play.png" class="audio-icon"></image>
 							<view class="audio-progress">
-								<progress percent="20" stroke-width="3" activeColor="#ffffff" backgroundColor="#aaaaaa" />
+								<progress percent="70" stroke-width="3" activeColor="#ffffff" backgroundColor="#aaaaaa" />
 							</view>
 							<view class="audio-length">3:50</view>
 						</view>
 						<view class="audio-media">
 							<image src="../../static/icon/play.png" class="audio-icon"></image>
 							<view class="audio-progress">
-								<progress percent="20" stroke-width="3" activeColor="#ffffff" backgroundColor="#bbbbbb" />
+								<progress percent="90" stroke-width="3" activeColor="#ffffff" backgroundColor="#bbbbbb" />
 							</view>
 							<view class="audio-length">3:50</view>
 						</view>
