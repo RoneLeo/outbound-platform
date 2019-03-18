@@ -16,6 +16,7 @@
 			
 		</view>
 		<view class="page-block index-head">
+			<!-- <swiper></swiper> -->
 			<image src="../../static/indexPng/bg.jpeg" class="header-img"></image>
 		</view>
 		<view class="page-block cases-wraper">
@@ -335,7 +336,11 @@
 </template>
 
 <script>
+	import Swiper from '../../components/jing-swiper/jing-swiper.vue'
 	export default {
+		components:{
+			Swiper
+		},
 		data: {
 			
 		},

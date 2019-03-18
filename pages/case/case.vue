@@ -1,5 +1,6 @@
 <template>
 	<view class="page">
+		<HMmessages ref="HMmessages" @complete="HMmessages = $refs.HMmessages" @clickMessage="clickMessage"></HMmessages>
 		<view class="cicle-toolbar" @tap="toolBarShowChange">
 			<view style="font-size: 12px;font-weight: 300;color: #FFFFFF;">
 				我要
@@ -111,13 +112,15 @@
 
 <script>
 	import Tab from '../../components/stzhang-tab/stzhang-tab'
+	import HMmessages from '../../components/HM-messages/HM-messages'
 	export default {
 		components:{
-			Tab
+			Tab,
+			HMmessages
 		},
 		data() {
 			return {
-				toolbarShow: false
+				// toolbarShow: false
 			};
 		},
 		onLoad(params) {
@@ -128,7 +131,9 @@
 				console.log(index)
 			},
 			toolBarShowChange() {
-				this.toolbarShow = !this.toolbarShow
+				console.log(11111);
+				this.HMmessages.show('认领成功！', {icon: 'success', closeButton: true, duration: 3000})
+				// this.toolbarShow = !this.toolbarShow
 			}
 		}
 	}
