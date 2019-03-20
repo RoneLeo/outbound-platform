@@ -79,7 +79,13 @@
 // 									uni.switchTab({
 // 										url: "../../pages/me/me"
 // 									});
-// 								} else {
+// 								} else if (res.data.status === 500) {
+// 									uni.showToast({
+// 										title: res.data.msg,
+// 										duration: 2000,
+// 										image: "../../static/icon/error.png"
+// 									})
+// 								}else {
 // 									uni.showToast({
 // 										title: '登录认证失败，请输入你的授权码！',
 // 										duration: 3000,
@@ -94,42 +100,6 @@
 		},
 		onHide: function() {
 			console.log('App Hide')
-		},
-		methods: {
-			login() {
-				uni.login({
-					provider: "weixin",
-					success: (loginResult) => {
-						// 获得微信登录的code：授权码
-						var code = loginResult.code;
-						uni.navigateTo({
-							url: './pages/login/login'
-						});
-						// 						uni.request({
-						// 							url: this.$url + "/mpWXLogin/",
-						// 							data: {
-						// 								"code": code,
-						// 							},
-						// 							method: "POST",
-						// 							success(res) {
-						// 								console.log(res);
-						// 								if(res.data.resCode === 200) {
-						// 									//登录成功
-						// 									uni.setStorageSync("globalUser", res.data.data);
-						// 									uni.switchTab({
-						// 										url: "pages/me/me"
-						// 									});
-						// 								}else if(res.data.resCode === 100) {
-						// 									//需要传授权码
-						// 									uni.navigateTo({
-						// 										url: 'pages/login/login'
-						// 									});
-						// 								}
-						// 							}
-						// 						});
-					}
-				});
-			}
 		}
 	}
 </script>
