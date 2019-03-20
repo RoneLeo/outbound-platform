@@ -26,6 +26,16 @@ const store = new Vuex.Store({
 		}
 	},
 	mutations: {
+		resetFormData(state){
+			state.formData = {
+				ba: '',
+				wz: '四川省成都市',
+				pic: '',
+				audios: [],
+				imgs: [],
+				videos: []
+			}
+		},
 		saveFormData(state, form) {
 			const oldForm = state.formData;
 			state.formData = Object.assign(oldForm, form);

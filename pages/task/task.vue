@@ -18,10 +18,10 @@
 				<image src="../../static/icon/record.png" class="toolbar-icon"></image>
 				<view class="toolbar-text">{{txt}}</view>
 			</view>
-			<view class="toolbar-item" @tap="gotoTakePhoto">
+			<!-- <view class="toolbar-item" @tap="gotoTakePhoto">
 				<image src="../../static/icon/takePhoto.png" class="toolbar-icon"></image>
 				<view class="toolbar-text">拍照</view>
-			</view>
+			</view> -->
 			<view class="toolbar-item" @tap="gotoTakeVideo">
 				<image src="../../static/icon/video.png" class="toolbar-icon"></image>
 				<view class="toolbar-text">录像</view>
@@ -360,7 +360,7 @@
 				uni.chooseImage({
 					count: 9, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-					sourceType: ['album'], //从相册选择
+					sourceType: ['album', 'camera'], //从相册选择
 					success:  (res) => {
 						let tempArr = this.imgSrcList;
 						tempArr = tempArr.concat(res.tempFilePaths);

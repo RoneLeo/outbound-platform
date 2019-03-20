@@ -345,13 +345,6 @@
 		},
 		methods:{
 			searchMe(e) {
-// 				var me = this;
-// 				// 获取搜索的内容
-// 				var value = e.detail.value;
-// 				me.keywords = value;
-// 				me.trailerList = [];
-// 				
-// 				me.pagedTrailerList(value, 1, 15);
 			}
 		}
 	}

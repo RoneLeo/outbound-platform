@@ -40,8 +40,6 @@ const formateSecondDigital = s => {
     let res = ''
     if (hour) {
         res += formatNumber(hour) + ':';
-    } else {
-        res += '00:'
     }
     if (minute) {
         res += formatNumber(minute) + ':';

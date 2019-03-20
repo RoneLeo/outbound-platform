@@ -1,132 +1,144 @@
 {
-	"pages": [
-		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    "pages" : [
 		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTextStyle": "black",
-				"navigationBarTitleText": "追金侠",
-				"navigationBarBackgroundColor": "#FFFFFF",
-				"backgroundColor": "#FFFFFF",
-				"app-plus": {
-					"titleNView": false
+		    "path" : "pages/login/login",
+		    "style" : {
+				"navigationBarTextStyle" : "white",
+				"navigationBarTitleText" : "登录",
+				"navigationBarBackgroundColor" : "#ffd655",
+				"backgroundColor" : "#ffd655",
+				"app-plus" : {
+				    "titleNView" : false
 				}
 			}
 		},
-		{
-			"path": "pages/myCase/myCase",
-			"style": {
-				"navigationBarTextStyle": "white",
-				"navigationBarTitleText": "我的案件",
-				"navigationBarBackgroundColor": "#00C674",
-				"backgroundColor": "#00C674",
-				"app-plus": {
-					"titleNView": false
-				}
-			}
-		},
-		{
-			"path": "pages/me/me",
-			"style": {
-				"navigationBarTextStyle": "white",
-				"navigationBarTitleText": "我的",
-				"navigationBarBackgroundColor": "#ffd655", 
-				"backgroundColor": "#ffd655",
-				"app-plus": {
-					"titleNView": false
-				}
-			}
-		},
-		{
-			"path": "pages/case/case",
-			"style": {
-				"app-plus": {
-					"titleNView": false
-				},
-				"navigationBarTextStyle": "white",
-				"navigationBarTitleText": "案件详情",
-				"navigationBarBackgroundColor": "#00C674",
-				"backgroundColor": "#00C674"
-			}
-		},
-		{
-			"path": "pages/task/task",
-			"style": {
-				"app-plus": {
-					"titleNView": false
-				},
-				"navigationBarTextStyle": "white",
-				"navigationBarTitleText": "任务详情",
-				"navigationBarBackgroundColor": "#00C674",
-				"backgroundColor": "#00C674"
-			}
-		},
-		{
-			"path": "pages/setting/setting",
-			"style": {
-				"navigationBarTextStyle": "black",
-				"navigationBarTitleText": "设置",
-				"navigationBarBackgroundColor": "#FFFFFF",
-				"backgroundColor": "#FFFFFF"
-			}
-		},
-		{
-			"path": "pages/takephoto/takephoto",
-			"style": {
-				"navigationBarTextStyle": "white",
-				"navigationBarTitleText": "拍照",
-				"navigationBarBackgroundColor": "#000000",
-				"backgroundColor": "#000000"
-			}
-		},
-		{
-			"path": "pages/takevideo/takevideo",
-			"style": {
-				"navigationBarTextStyle": "white",
-				"navigationBarTitleText": "录像",
-				"navigationBarBackgroundColor": "#000000",
-				"backgroundColor": "#000000"
-			}
-		}
-	],
-	"permission": {
-		"scope.userLocation": {
-			"desc": "你的位置信息将用于小程序获取位置展示"
-		}
-		
-	},
-	"tabBar": {
-		"color": "#bfbfbf",
-		"selectedColor": "#515151",
-		"backgroundColor": "#ffffff",
-		"position": "bottom",
-		"borderStyle": "white",
-		"list": [
-			//最少两个，最多5个
-			{
-				"pagePath": "pages/index/index",
-				"text": "首页",
-				"iconPath": "static/tabBarIco/index.png", //不支持网络图片
-				"selectedIconPath": "static/tabBarIco/index_sel.png"
-			},
-			{
-				"pagePath": "pages/myCase/myCase",
-				"text": "案件",
-				"iconPath": "static/tabBarIco/case.png", //不支持网络图片
-				"selectedIconPath": "static/tabBarIco/case_sel.png"
-			},
-			{
-				"pagePath": "pages/me/me",
-				"text": "我的",
-				"iconPath": "static/tabBarIco/me.png", //不支持网络图片
-				"selectedIconPath": "static/tabBarIco/me_sel.png"
-			}
-		]
-	},
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "追金侠",
-		"navigationBarBackgroundColor": "#FFFFFF",
-		"backgroundColor": "#FFFFFF"
-	}
+        //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+        {
+            "path" : "pages/index/index",
+            "style" : {
+                "navigationBarTextStyle" : "black",
+                "navigationBarTitleText" : "追金侠",
+                "navigationBarBackgroundColor" : "#FFFFFF",
+                "backgroundColor" : "#FFFFFF",
+                "app-plus" : {
+                    "titleNView" : false
+                }
+            }
+        },
+        {
+            "path" : "pages/myCase/myCase",
+            "style" : {
+                "navigationBarTextStyle" : "white",
+                "navigationBarTitleText" : "我的案件",
+                "navigationBarBackgroundColor" : "#00C674",
+                "backgroundColor" : "#00C674",
+                "app-plus" : {
+                    "titleNView" : false
+                }
+            }
+        },
+        {
+            "path" : "pages/me/me",
+            "style" : {
+                "navigationBarTextStyle" : "white",
+                "navigationBarTitleText" : "我的",
+                "navigationBarBackgroundColor" : "#ffd655",
+                "backgroundColor" : "#ffd655",
+                "app-plus" : {
+                    "titleNView" : false
+                }
+            }
+        },
+        {
+            "path" : "pages/case/case",
+            "style" : {
+                "app-plus" : {
+                    "titleNView" : false
+                },
+                "navigationBarTextStyle" : "white",
+                "navigationBarTitleText" : "案件详情",
+                "navigationBarBackgroundColor" : "#00C674",
+                "backgroundColor" : "#00C674"
+            }
+        },
+        {
+            "path" : "pages/task/task",
+            "style" : {
+                "app-plus" : {
+                    "titleNView" : false
+                },
+                "navigationBarTextStyle" : "white",
+                "navigationBarTitleText" : "任务详情",
+                "navigationBarBackgroundColor" : "#00C674",
+                "backgroundColor" : "#00C674"
+            }
+        },
+        {
+            "path" : "pages/setting/setting",
+            "style" : {
+                "navigationBarTextStyle" : "black",
+                "navigationBarTitleText" : "设置",
+                "navigationBarBackgroundColor" : "#FFFFFF",
+                "backgroundColor" : "#FFFFFF"
+            }
+        },
+        {
+            "path" : "pages/takephoto/takephoto",
+            "style" : {
+                "navigationBarTextStyle" : "white",
+                "navigationBarTitleText" : "拍照",
+                "navigationBarBackgroundColor" : "#000000",
+                "backgroundColor" : "#000000"
+            }
+        },
+        {
+            "path" : "pages/takevideo/takevideo",
+            "style" : {
+                "navigationBarTextStyle" : "white",
+                "navigationBarTitleText" : "录像",
+                "navigationBarBackgroundColor" : "#000000",
+                "backgroundColor" : "#000000"
+            }
+        }
+        
+    ],
+    "permission" : {
+        "scope.userLocation" : {
+            "desc" : "你的位置信息将用于小程序获取位置展示"
+        }
+    },
+    "tabBar" : {
+        "color" : "#bfbfbf",
+        "selectedColor" : "#515151",
+        "backgroundColor" : "#ffffff",
+        "position" : "bottom",
+        "borderStyle" : "white",
+        "list" : [
+            //最少两个，最多5个
+            {
+                "pagePath" : "pages/index/index",
+                "text" : "首页",
+                "iconPath" : "static/tabBarIco/index.png", //不支持网络图片
+                "selectedIconPath" : "static/tabBarIco/index_sel.png"
+            },
+            {
+                "pagePath" : "pages/myCase/myCase",
+                "text" : "案件",
+                "iconPath" : "static/tabBarIco/case.png", //不支持网络图片
+                "selectedIconPath" : "static/tabBarIco/case_sel.png"
+            },
+            {
+                "pagePath" : "pages/me/me",
+                "text" : "我的",
+                "iconPath" : "static/tabBarIco/me.png", //不支持网络图片
+                "selectedIconPath" : "static/tabBarIco/me_sel.png"
+            }
+        ]
+    },
+    "globalStyle" : {
+        "navigationBarTextStyle" : "black",
+        "navigationBarTitleText" : "追金侠",
+        "navigationBarBackgroundColor" : "#FFFFFF",
+        "backgroundColor" : "#FFFFFF"
+    }
 }

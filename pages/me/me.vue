@@ -1,16 +1,5 @@
 <template>
 	<view class="page page-fill">
-		<!-- <image src="../../static/indexPng/me.png" class="me-img"></image>
-		<view class="header">
-			<view class="user-img-wrapper">
-				<image src="../../static/icon/women.png" class="user-img"></image>
-			</view>
-			<view class="user-info">
-				<view class="user-name">admin</view>
-				<view class="user-zh">账号：admin</view>
-			</view>
-		</view> -->
-		<!-- <image src="../../static/indexPng/me.png" style="width: 100%;height: 300upx;" ></image> -->
 		<view class="header">
 			<image src="../../static/icon/women.png" class="face"></image>
 			<view class="info-wapper">
