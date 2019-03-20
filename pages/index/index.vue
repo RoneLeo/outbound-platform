@@ -336,13 +336,12 @@
 </template>
 
 <script>
-	import Swiper from '../../components/jing-swiper/jing-swiper.vue'
 	export default {
-		components:{
-			Swiper
-		},
-		data: {
-			
+		
+		data() {
+			return {
+				
+			}
 		},
 		methods:{
 			searchMe(e) {

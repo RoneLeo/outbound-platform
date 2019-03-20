@@ -90,6 +90,9 @@
 				</view>
 			</view>
 			<view class="case-list-item">
+				<view class="case-list-item-tag">
+					等待发放佣金中...
+				</view>
 				<!-- <view class="case-list-item-tag"> -->
 					<image src="../../static/icon/yes1.png" class="tag-img"></image>
 					<!-- 即将发放佣金 -->
@@ -130,6 +133,9 @@
 				</view>
 			</view>
 			<view class="case-list-item">
+				<view class="case-list-item-tag" style="background: linear-gradient(to left, #FE6756, #F00000)">
+					审核不通过
+				</view>
 				<image src="../../static/icon/no2.png" class="tag-img"></image>
 				<view class="case-list-item-body">
 					<view class="case-item-info">
@@ -254,7 +260,7 @@
 				position: absolute;
 				top: 0;
 				right: 0;
-				background:linear-gradient(to left,#00FA9A, #ADFF2F) ;
+				background:linear-gradient(to left,#00FA9A, #ADFF2F);
 				opacity: .8;
 				padding: 5upx 30upx;
 				font-size: 14px;

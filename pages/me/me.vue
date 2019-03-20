@@ -10,6 +10,7 @@
 				<view class="user-zh">账号：admin</view>
 			</view>
 		</view> -->
+		<!-- <image src="../../static/indexPng/me.png" style="width: 100%;height: 300upx;" ></image> -->
 		<view class="header">
 			<image src="../../static/icon/women.png" class="face"></image>
 			<view class="info-wapper">

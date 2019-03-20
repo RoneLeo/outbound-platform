@@ -1,13 +1,48 @@
-.mask{/*遮慕层*/
-		/*基础*/
-		position: fixed;/*相对于手机屏幕布局*/
-		width:100%;
-		height:100%;
-		top:0;
-		z-index: 97;/*叠层设置(（注意：值一定要比悬浮加号低）)*/
-		/*遮慕背景色*/
-		background-color:rgba(0,0,0,.4);
+.mask {
+	/*遮慕层*/
+	/*基础*/
+	position: fixed;
+	/*相对于手机屏幕布局*/
+	width: 100%;
+	height: 100%;
+	top: 0;
+	z-index: 97;
+	/*叠层设置(（注意：值一定要比悬浮加号低）)*/
+	/*遮慕背景色*/
+	background-color: rgba(0, 0, 0, .4);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.recording-box {
+	width: 200upx;
+	height: 200upx;
+	border-radius: 50%;
+	background: #00C674;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 50upx;
+}
+.recording-img {
+	width: 100upx;
+	height: 100upx;
+	animation: recording 1s infinite ease-in-out;
+	animation-direction: alternate;
+}
+
+@keyframes recording {
+		from {
+			transform: scale(0.5);
+			opacity: 0.5;
+		}
+
+		to {
+			transform: scale(1);
+			opacity: 1;
+		}
 	}
+
 .cicle-toolbar {
 	position: fixed;
 	bottom: 13%;
@@ -196,16 +231,17 @@
 }
 
 .list-item-tt {
-	align-self: center;
+	/* align-self: center; */
 	width: 180upx;
-	color: #333;
+	color: #2a3a4a;
+	/* font-weight: bold; */
 	text-align: right;
 }
 
 .list-item-td {
 	align-self: center;
 	width: 510upx;
-	color: #777;
+	color: #34495e;
 }
 
 
@@ -262,14 +298,14 @@
 .record-item-tt {
 	/* align-self: center; */
 	width: 100upx;
-	color: #333;
+	color: #222;
 	text-align: right;
 }
 
 .record-item-td {
 	align-self: center;
 	width: 590upx;
-	color: #777;
+	color: #888;
 }
 
 .addr-block {
@@ -279,11 +315,13 @@
 	justify-content: space-between;
 	margin-top: -5upx;
 }
+
 .addr-textarea {
 	width: 430upx;
 	align-self: center;
 	margin-left: 20upx;
 }
+
 .addr-btn {
 	width: 130upx;
 	color: #333;
@@ -303,11 +341,13 @@
 	position: relative;
 	padding: 10upx 5upx 0upx;
 }
+
 .img-media {
 	width: 170upx;
 	height: 240upx;
 	/* border-radius: 10upx; */
 }
+
 .img-delete {
 	position: absolute;
 	top: 0;
@@ -347,6 +387,7 @@
 	color: #FFFFFF;
 	font-size: 14px;
 }
+
 .audio-delete {
 	align-self: center;
 	width: 35upx;
@@ -360,6 +401,18 @@
 	height: 310upx;
 	padding: 15upx 10upx;
 	margin: 0upx 0 10upx;
+	position: relative;
+}
+.video-delete {
+	position: absolute;
+	top: 10upx;
+	right: 10upx;
+	height: 45upx;
+	width: 45upx;
+	opacity: .3;
+	border: 30upx solid transparent;
+	border-right: 10upx solid transparent;
+	border-top: 10upx solid transparent;
 }
 
 video {

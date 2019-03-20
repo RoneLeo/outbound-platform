@@ -1,6 +1,10 @@
 <template>
 	<view class="page">
-		<view v-show="toolbarShow" class="mask" @tap="toolBarShowChange"></view>
+		<view v-show="toolbarShow" class="mask" @tap="toolBarShowChange">
+			<view v-show="isRecording" class="recording-box">
+				<image src="../../static/icon/record.png" class="recording-img"></image>
+			</view>
+		</view>
 		<view class="cicle-toolbar" v-show="!toolbarShow" @tap="toolBarShowChange">
 			<view style="font-size: 12px;font-weight: 300;color: #FFFFFF;">
 				开始
@@ -14,11 +18,11 @@
 				<image src="../../static/icon/record.png" class="toolbar-icon"></image>
 				<view class="toolbar-text">{{txt}}</view>
 			</view>
-			<view class="toolbar-item">
+			<view class="toolbar-item" @tap="gotoTakePhoto">
 				<image src="../../static/icon/takePhoto.png" class="toolbar-icon"></image>
 				<view class="toolbar-text">拍照</view>
 			</view>
-			<view class="toolbar-item">
+			<view class="toolbar-item" @tap="gotoTakeVideo">
 				<image src="../../static/icon/video.png" class="toolbar-icon"></image>
 				<view class="toolbar-text">录像</view>
 			</view>
@@ -68,35 +72,35 @@
 			<view class="list-wrapper">
 				<view class="list-item">
 					<view class="list-item-tt over-text">电话号</view>
-					<view class="list-item-td over-text">18977889900</view>
+					<view class="list-item-td">18977889900</view>
 				</view>
 				<view class="list-item">
 					<view class="list-item-tt over-text">详细地址详细</view>
-					<view class="list-item-td over-text">四川省成都市武侯区青羊区金牛区天府新区</view>
+					<view class="list-item-td">四川省成都市武侯区青羊区金牛区天府新区</view>
 				</view>
 				<view class="list-item">
 					<view class="list-item-tt over-text">电话号</view>
-					<view class="list-item-td over-text">18977889900</view>
+					<view class="list-item-td">18977889900</view>
 				</view>
 				<view class="list-item">
 					<view class="list-item-tt over-text">详细地址详细</view>
-					<view class="list-item-td over-text">四川省成都市武侯区青羊区金牛区天府新区</view>
+					<view class="list-item-td">四川省成都市武侯区青羊区金牛区天府新区</view>
 				</view>
 				<view class="list-item">
 					<view class="list-item-tt over-text">电话号</view>
-					<view class="list-item-td over-text">18977889900</view>
+					<view class="list-item-td">18977889900</view>
 				</view>
 				<view class="list-item">
 					<view class="list-item-tt over-text">详细地址详细</view>
-					<view class="list-item-td over-text">四川省成都市武侯区青羊区金牛区天府新区</view>
+					<view class="list-item-td">四川省成都市武侯区青羊区金牛区天府新区</view>
 				</view>
 				<view class="list-item">
 					<view class="list-item-tt over-text">电话号</view>
-					<view class="list-item-td over-text">18977889900</view>
+					<view class="list-item-td">18977889900</view>
 				</view>
 				<view class="list-item">
 					<view class="list-item-tt over-text">详细地址详细</view>
-					<view class="list-item-td over-text">四川省成都市武侯区青羊区金牛区天府新区</view>
+					<view class="list-item-td">四川省成都市武侯区青羊区金牛区天府新区</view>
 				</view>
 			</view>
 		</view>
@@ -108,15 +112,15 @@
 			<view class="task-list">
 				<view class="list-item">
 					<view class="list-item-tt over-text">外访方式</view>
-					<view class="list-item-td over-text">确认案件对象信息完整</view>
+					<view class="list-item-td">确认案件对象信息完整</view>
 				</view>
 				<view class="list-item">
 					<view class="list-item-tt over-text">外访地址</view>
-					<view class="list-item-td over-text">确认案件对象信息完整</view>
+					<view class="list-item-td ">确认案件对象信息完整</view>
 				</view>
 				<view class="list-item">
 					<view class="list-item-tt over-text">外访说明</view>
-					<view class="list-item-td over-text">到地址后仔细询问相关信息，并且记录下俩</view>
+					<view class="list-item-td">到地址后仔细询问相关信息，并且记录下俩</view>
 				</view>
 			</view>
 		</view>
@@ -130,14 +134,14 @@
 				<view class="record-item">
 					<view class="record-item-tt over-text">定 位</view>
 					<view class="record-item-td addr-block">
-						<textarea :value="addressName" auto-height class="addr-textarea" />
+						<textarea :value="addressName" auto-height @change="addressChange" @blur="addressChange" @confirm="addressChange"  class="addr-textarea" />
 						<view @tap="getLocation()" class="addr-btn">获取定位</view>
 					</view>
 				</view>
 				<view class="record-item">
 					<view class="record-item-tt over-text">记 录</view>
 					<view class="record-item-td">
-						<textarea value="" placeholder="请填写本次记录" auto-height cursor-spacing="10px" />
+						<textarea :value="bz" placeholder="请填写本次记录" @change="bzChange" @blur="bzChange" @confirm="bzChange" auto-height cursor-spacing="10px" />
 						<!-- <input type="text" value="" placeholder="请填写" /> -->
 					</view>
 				</view>
@@ -172,12 +176,10 @@
 				<view class="record-item">
 					<view class="record-item-tt over-text">视 频</view>
 					<view class="record-item-td media-wrapper">
-						<view class="video-media">
-							<video src="https://www.itzixi.com:99/superhero/MARVEL/Thor3/trailer.mp4" controls></video>
+						<view class="video-media" v-for="(video, videoIndex) in videoSrcList" :key="videoIndex">
+							<video :src="video" controls></video>
+							<image src="../../static/icon/delete.png" class="video-delete" @tap="deleteVideo(videoIndex)" data-imgIndex="videoIndex"></image>
 						</view>
-						<!-- <view class="video-media">
-							<video src="https://www.itzixi.com:99/superhero/MARVEL/SpiderManHomecoming/trailer.mp4" controls></video>
-						</view> -->
 					</view>
 				</view>
 				
@@ -190,45 +192,112 @@
 	import Tab from '../../components/stzhang-tab/stzhang-tab'
 	import amap from '../../lib/amap-wx.js'
 	import util from '../../utils/util.js'
-	const recorderManager = uni.getRecorderManager(); //录音管理器实例
-	const innerAudioContext = uni.createInnerAudioContext()
+	import { mapState, mapMutations } from 'vuex'
+	
 	export default {
+		computed: {
+			...mapState(['formData']),
+			imgSrcList: {
+				get () {
+					return this.$store.state.formData.imgs
+				}
+			},
+			audioSrcList: {
+				get () {
+					return this.$store.state.formData.audios
+				}
+			},
+			videoSrcList(){
+				return this.$store.state.formData.videos;
+			},
+			addressName: {
+				get () {
+					return this.$store.state.formData.wz
+				},
+				set (value) {
+					console.log('wz:', value);
+					let temp = Object.assign({}, {wz: value});
+					this.$store.commit('saveFormData', temp)
+				}
+			},
+			bz: {
+				get () {
+					return this.$store.state.formData.bz
+				},
+				set (value) {
+					console.log('bz:', value);
+					let temp = Object.assign({}, {bz: value});
+					this.$store.commit('saveFormData', temp)
+				}
+			}
+		},
 		components:{
 			Tab
 		},
 		data() {
 			return {
+				recorderManager: {},
+				innerAudioContext: {},
 				amapPlugin: null,  
 				amapKey: '4e8af665cf89ce76c04389a0719c67a5',
-				imgSrcList: [
-					"../../static/indexPng/photo2.png",
-					"../../static/indexPng/photo1.png"
-				],
+				// imgSrcList: this.$store.state.formData.imgs,
 				toolbarShow: false,
-				addressName: '成都市',
-				audioSrcList: [],
-				txt: '长按录音'
+				// addressName: this.$store.state.formData.wz,
+				// audioSrcList: this.$store.state.formData.audios,
+				txt: '长按录音',
+				isRecording: false
 			};
 		},
 		onLoad(params) {
-			this.amapPlugin = new amap.AMapWX({  
-				key: this.amapKey  
-			}); 
-			console.log(util.formatTime(new Date()))
-			console.log(params, params.taskId)
+			uni.authorize({
+				scope: 'scope.record',
+				success() {
+					uni.getRecorderManager()
+				}
+			});
+			this.recorderManager = uni.getRecorderManager();
+			this.innerAudioContext = uni.createInnerAudioContext();
+			//#ifdef MP-WEIXIN
+			uni.authorize({
+				scope: 'scope.userLocation',
+				success: () => {
+					this.getLocation()
+				}
+			});
+			//#endif
 		},
 		methods:{
+			
+			...mapMutations(['saveFormData']),
+			addressChange(e) {
+				let data = e.detail.value;
+				this.addressName = data;
+			},
+			bzChange(e) {
+				let data = e.detail.value;
+				this.bz = data;
+			},
+			gotoTakePhoto() {
+				uni.navigateTo({
+					url: '../takephoto/takephoto'
+				});
+			},
+			gotoTakeVideo() {
+				uni.navigateTo({
+					url: '../takevideo/takevideo'
+				});
+			},
 			playAudio(index) {
-				innerAudioContext.play();
-				innerAudioContext.onPlay(() => {
+				this.innerAudioContext.play();
+				this.innerAudioContext.onPlay(() => {
 					this.audioSrcList[index].isPlaying = true;
 					console.log('开始播放')
 				});
-				innerAudioContext.onTimeUpdate(() => {
+				this.innerAudioContext.onTimeUpdate(() => {
 					const time = Math.floor(this.audioSrcList[index].audio.duration / 0.25);
 					console.log('监听进度', time);
 				});
-				innerAudioContext.onEnded( () => {
+				this.innerAudioContext.onEnded( () => {
 					this.audioSrcList[index].isPlaying = false;
 				});
 			},
@@ -242,15 +311,14 @@
 			audioTouchEnd() {
 				this.bindStopAudio();
 				this.toolBarShowChange();
+				this.isRecording = false;
 			},
 			bindStopAudio() {
-				recorderManager.stop();
-				recorderManager.onStop((res) => {
-					console.log('recorder stop', res)
+				this.recorderManager.stop();
+				this.recorderManager.onStop((res) => {
 					this.txt = '长按录音';
 					const { tempFilePath } = res;
-					innerAudioContext.src = tempFilePath;
-					console.log('档期内音频', innerAudioContext, innerAudioContext.duration)
+					this.innerAudioContext.src = tempFilePath;
 					setTimeout(() => {
 // 						if (s < 1) {
 // 							console.log('录音时间太短');
@@ -259,17 +327,17 @@
 								audio: {
 									src: tempFilePath,
 									date: util.formatTime(new Date()),
-									duration: innerAudioContext.duration,
-									time: util.formateSecond(Math.round(innerAudioContext.duration * 10) / 10)
+									duration: this.innerAudioContext.duration,
+									time: util.formateSecond(Math.round(this.innerAudioContext.duration * 10) / 10)
 								},
 								percent: 0,
 								isPlaying: false
 							});
-							let arr = [];
-							arr.push(audioSrc);
-							console.log(arr, audioSrc)
-							this.audioSrcList = this.audioSrcList.concat(arr);
-							console.log('audioSrcList', this.audioSrcList);
+							let arr = new Array(audioSrc);
+							
+							let tempArr = this.audioSrcList;
+							tempArr = tempArr.concat(arr);
+							this.saveFormData({audios: tempArr});
 						// }
 					}, 500)
 				})
@@ -282,11 +350,11 @@
 					encodeBitRate: 192000,
 					format: 'aac'
 				}
-				recorderManager.start(options);
-				recorderManager.onStart(() => {
+				this.recorderManager.start(options);
+				this.isRecording = true;
+				this.recorderManager.onStart(() => {
 					console.log('recorder start')
 				})
-
 			},
 			chooseImg() {
 				uni.chooseImage({
@@ -294,8 +362,9 @@
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['album'], //从相册选择
 					success:  (res) => {
-						console.log(JSON.stringify(res.tempFilePaths));
-						this.imgSrcList = this.imgSrcList.concat(res.tempFilePaths)
+						let tempArr = this.imgSrcList;
+						tempArr = tempArr.concat(res.tempFilePaths);
+						this.saveFormData({imgs: tempArr});
 					}
 				});
 			},
@@ -328,11 +397,20 @@
 					}
 				});
 			},
+			deleteVideo(index) {
+				let tempArr = this.videoSrcList;
+				tempArr.splice(index,1);
+				this.saveFormData({videos: tempArr});
+			},
 			deleteAudio(index) {
-				this.audioSrcList.splice(index,1);
+				let tempArr = this.audioSrcList;
+				tempArr.splice(index,1);
+				this.saveFormData({audios: tempArr});
 			},
 			deleteImg(index) {
-				this.imgSrcList.splice(index,1);
+				let tempArr = this.imgSrcList;
+				tempArr.splice(index,1);
+				this.saveFormData({imgs: tempArr});
 			},
 			previewImgs(index) {
 				//#ifdef APP-PLUS || MP-WEIXIN
