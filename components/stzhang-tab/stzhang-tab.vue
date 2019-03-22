@@ -33,10 +33,15 @@
 						:false
 			}
 		},
+		onLoad() {
+			console.log(this.modelData)
+		},
 		methods: {
 			tap(index){
-				if(index!==this.activeIndex)this.$emit("change",index);
-				this.activeIndex=index;
+				if(index !== this.activeIndex) {
+					this.$emit("change",index);
+					this.activeIndex=index;
+				}
 			},
 			/**
 			 * @name 初始化activeIndex

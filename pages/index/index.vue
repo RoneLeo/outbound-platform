@@ -1,26 +1,26 @@
 <template>
 	<view class="page">
-		<view class="search-block">
-			
-			<view class="search-ico-wapper">
-				<image src="../../static/icon/search.png" class="search-ico"></image>
-			</view>
-			
-			<input 
-				placeholder="搜索案件" 
-				maxlength="10" 
-				class="search-text" 
-				confirm-type="search"
-				@confirm="searchMe"
-			/>
-			
-		</view>
+		
 		<view class="page-block index-head">
-			<!-- <swiper></swiper> -->
-			<image src="../../static/indexPng/bg.jpeg" class="header-img"></image>
+			<Swiper></Swiper>
+			<!-- <image src="http://182.151.22.247:8083/files/swiper2.jpg" class="header-img"></image> -->
+			<view class="search-block">
+				<view class="search-ico-wapper">
+					<image src="../../static/icon/search1.png" class="search-ico"></image>
+				</view>
+				<input 
+					placeholder="搜索案件" 
+					maxlength="10" 
+					class="search-text" 
+					confirm-type="完成"
+					@confirm="searchMe"
+				/>
+			</view>
+			<!-- <image src="../../static/indexPng/bg.jpeg" class="header-img"></image> -->
 		</view>
+		
 		<view class="page-block cases-wraper">
-			<view class="cases-item">
+			<view class="cases-item no-border">
 				<view class="case-txt case-id case-title">
 					案件编号
 				</view>
@@ -332,19 +332,29 @@
 			</view>
 
 		</view>
+	
+		<view class="page-end">
+			<view class="end-txt">-- END --</view>
+		</view>
 	</view>
 </template>
 
 <script>
+	import Swiper from '../../components/swiper/swiper.vue'
 	export default {
-		
+		components: {
+			Swiper
+		},
 		data() {
 			return {
 				
 			}
 		},
+		onLoad() {
+		},
 		methods:{
 			searchMe(e) {
+				console.log('searchMe');
 			}
 		}
 	}

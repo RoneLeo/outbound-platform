@@ -56,12 +56,13 @@
 	border-radius: 50upx;
 	background: linear-gradient(to bottom, #66CC66, #00B07B);
 	z-index: 2000;
+	box-shadow: 8upx 5upx 10upx 0upx RGBA(0, 0, 0, .1);
 	/* border: 20upx solid transparent; */
 }
 
 .toolbar {
 	position: fixed;
-	bottom: 13%;
+	bottom: 15%;
 	right: 3%;
 	width: 70upx;
 	display: flex;
@@ -71,6 +72,7 @@
 	border-radius: 40upx;
 	background: linear-gradient(to bottom, #66CC66, #00B07B);
 	z-index: 2000;
+	box-shadow: 8upx 8upx 10upx 0upx RGBA(255, 255, 255, .2);
 }
 
 .toolbar-item {
@@ -98,8 +100,7 @@
 
 
 
-.case-head {
-	/* padding: 20upx; */
+/* .case-head {
 	position: relative;
 }
 
@@ -199,7 +200,6 @@
 	right: -3upx;
 	width: 120upx;
 	height: 60upx;
-	/* background: linear-gradient(to left, #66CC66,#00B07B); */
 	background: #00B07B;
 	border-bottom-left-radius: 25upx;
 	border-top-left-radius: 25upx;
@@ -227,14 +227,11 @@
 	flex-direction: row;
 	justify-content: space-between;
 	font-size: 14px;
-	/* border-bottom: 1px solid #f5f5f5; */
 }
 
 .list-item-tt {
-	/* align-self: center; */
 	width: 180upx;
 	color: #2a3a4a;
-	/* font-weight: bold; */
 	text-align: right;
 }
 
@@ -243,7 +240,7 @@
 	width: 510upx;
 	color: #34495e;
 }
-
+ */
 
 
 .task-info {

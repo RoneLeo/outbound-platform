@@ -1,17 +1,17 @@
 <template>
 	<view class="page page-fill">
 		<view class="header">
-			<image src="../../static/icon/women.png" class="face"></image>
+			<image :src="userInfo.avatarUrl" class="face"></image>
 			<view class="info-wapper">
 				<view class="nickname">
-					外访员
+					{{userInfo.nickName}}
 				</view>
 				<view class="nav-info">账号：admin</view>
 			</view>
-			<view class="set-wapper">
-				<navigator open-type="navigate" url="/pages/setting/setting">
+			<view class="set-wapper" @tap="gotoSetting" >
+				<!-- <navigator open-type="navigate" url="/pages/setting/setting"> -->
 					<image src="../../static/icon/settings.png" class="settings"></image>
-				</navigator>
+				<!-- </navigator> -->
 			</view>
 		</view>
 		<view class="me-page">
@@ -60,15 +60,29 @@
 			};
 		},
 		onShow() {
-			var me = this;
-			// 用户状态的切换
-			var userInfo = uni.getStorageSync("globalUser");
-			if (userInfo != null && userInfo != "" && userInfo != undefined) {
-				me.userIsLogin = true;
-				me.userInfo = userInfo;
-			} else {
-				me.userIsLogin = false;
-				me.userInfo = {};
+			uni.getUserInfo({
+				provider: 'weixin',
+				success: (infoRes) => {
+					console.log('用户昵称为：' + infoRes.userInfo.avatarUrl);
+					this.userInfo = infoRes.userInfo;
+				}
+			});
+// 			var me = this;
+// 			// 用户状态的切换
+// 			var userInfo = uni.getStorageSync("globalUser");
+// 			if (userInfo != null && userInfo != "" && userInfo != undefined) {
+// 				me.userIsLogin = true;
+// 				me.userInfo = userInfo;
+// 			} else {
+// 				me.userIsLogin = false;
+// 				me.userInfo = {};
+// 			}
+		},
+		methods: {
+			gotoSetting() {
+				uni.navigateTo({
+					url: '../../pages/setting/setting',
+				});
 			}
 		}
 	}

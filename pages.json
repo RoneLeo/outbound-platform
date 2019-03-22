@@ -99,8 +99,31 @@
                 "navigationBarBackgroundColor" : "#000000",
                 "backgroundColor" : "#000000"
             }
-        }
-        
+        },
+        {
+            "path" : "pages/modifyRadio/modifyRadio",
+            "style" : {
+                "navigationBarTextStyle" : "white",
+                "navigationBarTitleText" : "修改页面",
+                "navigationBarBackgroundColor" : "#ffd655",
+                "backgroundColor" : "#ffd655",
+                "app-plus" : {
+                    "titleNView" : false
+                }
+            }
+        },
+		{
+		    "path" : "pages/modifyTxt/modifyTxt",
+		    "style" : {
+		        "navigationBarTextStyle" : "white",
+		        "navigationBarTitleText" : "修改页面",
+		        "navigationBarBackgroundColor" : "#ffd655",
+		        "backgroundColor" : "#ffd655",
+		        "app-plus" : {
+		            "titleNView" : false
+		        }
+		    }
+		}
     ],
     "permission" : {
         "scope.userLocation" : {

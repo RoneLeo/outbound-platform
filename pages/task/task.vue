@@ -24,107 +24,15 @@
 			</view> -->
 			<view class="toolbar-item" @tap="gotoTakeVideo">
 				<image src="../../static/icon/video.png" class="toolbar-icon"></image>
-				<view class="toolbar-text">录像</view>
+				<view class="toolbar-text">点击录像</view>
 			</view>
 			<view class="toolbar-item" @tap="toolBarShowChange">
 				<image src="../../static/icon/down.png" class="toolbar-icon"></image>
 			</view>
 		</view>
-		<view class="page-block case-head">
-			<view class="basic-info">
-				<view class="head-img-wrapper">
-					<image src="../../static/icon/man.png" class="head-img"></image>
-				</view>
-				<view class="head-info">
-					<view class="info-data info-title">
-						<view class="info-name">张三</view>
-						<view class="info-age">37岁</view>
-						<view class="info-addr">四川省成都市</view>
-					</view>
-					<view class="info-data">
-						委案到期日：2019-03-14
-					</view>
-					<view class="info-data">
-						身份证号：511922177408299999
-					</view>
-				</view>
-			</view>
-			<view class="data-wrapper">
-				<view class="data-item">
-					<view class="data-name">逾期金额</view>
-					<view class="data-num">12345.6元</view>
-				</view>
-				<view class="data-item">
-					<view class="data-name">已还款金额</view>
-					<view class="data-num">123元</view>
-				</view>
-				<view class="data-item">
-					<view class="data-name">逾期天数</view>
-					<view class="data-num">135天</view>
-				</view>
-			</view>
-			<view class="case-staus">
-				已接单
-			</view>
-		</view>
-		<view class="page-block other-info">
-			<Tab @change="tabchange($event,Defined)"></Tab>
-			<view class="list-wrapper">
-				<view class="list-item">
-					<view class="list-item-tt over-text">电话号</view>
-					<view class="list-item-td">18977889900</view>
-				</view>
-				<view class="list-item">
-					<view class="list-item-tt over-text">详细地址详细</view>
-					<view class="list-item-td">四川省成都市武侯区青羊区金牛区天府新区</view>
-				</view>
-				<view class="list-item">
-					<view class="list-item-tt over-text">电话号</view>
-					<view class="list-item-td">18977889900</view>
-				</view>
-				<view class="list-item">
-					<view class="list-item-tt over-text">详细地址详细</view>
-					<view class="list-item-td">四川省成都市武侯区青羊区金牛区天府新区</view>
-				</view>
-				<view class="list-item">
-					<view class="list-item-tt over-text">电话号</view>
-					<view class="list-item-td">18977889900</view>
-				</view>
-				<view class="list-item">
-					<view class="list-item-tt over-text">详细地址详细</view>
-					<view class="list-item-td">四川省成都市武侯区青羊区金牛区天府新区</view>
-				</view>
-				<view class="list-item">
-					<view class="list-item-tt over-text">电话号</view>
-					<view class="list-item-td">18977889900</view>
-				</view>
-				<view class="list-item">
-					<view class="list-item-tt over-text">详细地址详细</view>
-					<view class="list-item-td">四川省成都市武侯区青羊区金牛区天府新区</view>
-				</view>
-			</view>
-		</view>
-		<view class="page-block task-info">
-			<view class="block-name">
-				外访说明
-
-			</view>
-			<view class="task-list">
-				<view class="list-item">
-					<view class="list-item-tt over-text">外访方式</view>
-					<view class="list-item-td">确认案件对象信息完整</view>
-				</view>
-				<view class="list-item">
-					<view class="list-item-tt over-text">外访地址</view>
-					<view class="list-item-td ">确认案件对象信息完整</view>
-				</view>
-				<view class="list-item">
-					<view class="list-item-tt over-text">外访说明</view>
-					<view class="list-item-td">到地址后仔细询问相关信息，并且记录下俩</view>
-				</view>
-			</view>
-		</view>
-
+		
+		<BasicCase :tagTxt="tabList[zt]"></BasicCase>
+		
 		<view class="page-block task-info record-block">
 			<view class="block-name">
 				本次催单记录表
@@ -142,7 +50,6 @@
 					<view class="record-item-tt over-text">记 录</view>
 					<view class="record-item-td">
 						<textarea :value="bz" placeholder="请填写本次记录" @change="bzChange" @blur="bzChange" @confirm="bzChange" auto-height cursor-spacing="10px" />
-						<!-- <input type="text" value="" placeholder="请填写" /> -->
 					</view>
 				</view>
 				<view class="record-item">
@@ -185,11 +92,14 @@
 				
 			</view>
 		</view>
+		<view class="page-end">
+			<view class="end-txt">-- END --</view>
+		</view>
 	</view>
 </template>
 
 <script>
-	import Tab from '../../components/stzhang-tab/stzhang-tab'
+	import BasicCase from '../../components/basic-case/basic-case.vue'
 	import amap from '../../lib/amap-wx.js'
 	import util from '../../utils/util.js'
 	import { mapState, mapMutations } from 'vuex'
@@ -232,7 +142,7 @@
 			}
 		},
 		components:{
-			Tab
+			BasicCase
 		},
 		data() {
 			return {
@@ -245,26 +155,34 @@
 				// addressName: this.$store.state.formData.wz,
 				// audioSrcList: this.$store.state.formData.audios,
 				txt: '长按录音',
-				isRecording: false
+				isRecording: false,
+				
+				
+				tabList: ['外访中', '已外访', '未通过', '已通过', '已发放'],
+				zt: '0'
 			};
 		},
 		onLoad(params) {
+			console.log(params, params.id, params.zt)
+			this.zt = Number(params.zt)
+			//#ifdef MP-WEIXIN
 			uni.authorize({
 				scope: 'scope.record',
 				success() {
 					uni.getRecorderManager()
 				}
 			});
+// 			uni.authorize({
+// 				scope: 'scope.userLocation',
+// 				success: () => {
+// 					this.getLocation()
+// 				}
+// 			});
+			this.amapPlugin = new amap.AMapWX({key:this.amapKey});
+			//#endif
+			
 			this.recorderManager = uni.getRecorderManager();
 			this.innerAudioContext = uni.createInnerAudioContext();
-			//#ifdef MP-WEIXIN
-			uni.authorize({
-				scope: 'scope.userLocation',
-				success: () => {
-					this.getLocation()
-				}
-			});
-			//#endif
 		},
 		methods:{
 			
@@ -386,14 +304,23 @@
 			},
 			getLocation(e) {
 				console.log(e)
-				// let position = Object.assign({}, {longitude})
-				// this.getAddrName();
 				uni.getLocation({
 					type: 'wgs84',
-					success: function (res) {
+					success: (res) => {
 						console.log(res)
 						console.log('当前位置的经度：' + res.longitude);
 						console.log('当前位置的纬度：' + res.latitude);
+						this.amapPlugin.getRegeo({
+							success: (data) => {  
+								console.log(data)  
+								this.addressName = data[0].regeocodeData.formatted_address;  
+// 								console.log(this.addressName)
+// 								uni.hideLoading();  
+							},
+							fail: (info) => {
+								console.log(info)
+							}
+						});  
 					}
 				});
 			},

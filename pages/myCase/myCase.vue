@@ -2,55 +2,60 @@
 	<view class="page">
 		<view v-show="toolbarShow" class="tabBar-wrapper">
 			<view class="tabBar">
-				<view :class="{'tabBar-item':true,'active':activeIndex==0}">外访中</view>
-				<view :class="{'tabBar-item':true,'active':activeIndex==1}">已外访</view>
-				<view :class="{'tabBar-item':true,'active':activeIndex==2}">未通过</view>
-				<view :class="{'tabBar-item':true,'active':activeIndex==3}">未通过</view>
-				<view :class="{'tabBar-item':true,'active':activeIndex==4}">未通过</view>
+				<view v-for="(item, index) in tabList" :key="index" @tap="activeTabChange(index)" :class="{'tabBar-item':true,'active':activeIndex==index}">
+					{{item}}
+				</view>
 			</view>
 			<image src="../../static/icon/close.png" class="tabBar-icon" @tap="toolBarShowChange"></image>
 		</view>
-		
+
 		<view class="cicle-toolbar" v-show="!toolbarShow" @tap="toolBarShowChange">
 			<image src="../../static/icon/filter.png" class="toolbar-icon"></image>
 		</view>
-		
+
 		<view :class="{'case-list':true,'marginTop':toolbarShow}">
 			<view>
-				<navigator open-type="navigate" url="/pages/task/task?taskId=1">
-					<view class="case-list-item">
-						<view class="case-list-item-body">
-							<view class="case-item-info">
-								<view class="case-item-info-name">
-									张三
-									<view style="color: #999;margin-left: 18upx;">27岁</view>
-									<view style="color: #999;margin-left: 18upx;">男</view>
-								</view>
-								<view class="case-item-info-addr">
-									<view class="case-item-info-tt">外访地址</view>
-									<view class="case-item-info-td">
-										四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区
+				<!-- <navigator open-type="navigate" url="/pages/task/task?taskId=1"> -->
+					<view class="case-list-item" v-for="(item, index) in cases" :key="index">
+						<block v-show="item.zt == activeIndex">
+							<view v-if="item.zt !== '0'" class="case-list-item-tag">
+								{{item.zt === '1' ? '请耐心等待审核' : item.zt === '2' ? '审核不通过.' : item.zt === '3' ? '等待发放佣金中...' : '已赚取￥' + item.money }}
+							</view>
+							<image v-if="item.zt === '3'" src="../../static/icon/yes1.png" class="tag-img"></image>
+							<image v-if="item.zt === '2'" src="../../static/icon/no2.png" class="tag-img"></image>
+							<view class="case-list-item-body" @tap="takDetail(item.zt)">
+								<view class="case-item-info">
+									<view class="case-item-info-name">
+										{{item.name}}
+										<view style="color: #999;margin-left: 18upx;">{{item.age}}</view>
+										<view style="color: #999;margin-left: 18upx;">{{item.sex}}</view>
+									</view>
+									<view class="case-item-info-addr">
+										<view class="case-item-info-tt">外访地址</view>
+										<view class="case-item-info-td">
+											{{item.addr}}
+										</view>
 									</view>
 								</view>
+								<view class="case-item-way">
+									{{item.way}}
+								</view>
 							</view>
-							<view class="case-item-way">
-								确认对象地址信息准确性（上传定位信息）,认对象地址信息准确,认对象地址信息准确
+							<view class="case-list-item-foot">
+								<view class="case-item-btn">
+									<image src="../../static/icon/money.png" class="btn-img"></image>
+									<view class="btn-txt">￥{{item.price}}</view>
+								</view>
+								<view class="case-item-btn" @tap="makePhoneCall(item.phone)">
+									<image src="../../static/icon/phone.png" class="btn-img"></image>
+									<view class="btn-txt">{{item.phone}}</view>
+								</view>
 							</view>
-						</view>
-						<view class="case-list-item-foot">
-							<view class="case-item-btn">
-								<image src="../../static/icon/money.png" class="btn-img"></image>
-								<view class="btn-txt">￥30.00</view>
-							</view>
-							<view class="case-item-btn">
-								<image src="../../static/icon/phone.png" class="btn-img"></image>
-								<view class="btn-txt">18483680709</view>
-							</view>
-						</view>
+						</block>
 					</view>
-				</navigator>
+				<!-- </navigator> -->
 			</view>
-			<view class="case-list-item">
+			<!-- <view class="case-list-item">
 				<view class="case-list-item-tag">
 					请耐心等待审核
 				</view>
@@ -93,10 +98,7 @@
 				<view class="case-list-item-tag">
 					等待发放佣金中...
 				</view>
-				<!-- <view class="case-list-item-tag"> -->
-					<image src="../../static/icon/yes1.png" class="tag-img"></image>
-					<!-- 即将发放佣金 -->
-				<!-- </view> -->
+				<image src="../../static/icon/yes1.png" class="tag-img"></image>
 				<view class="case-list-item-body">
 					<view class="case-item-info">
 						<view class="case-item-info-name">
@@ -210,34 +212,116 @@
 						<view class="btn-txt">18483680709</view>
 					</view>
 				</view>
-			</view>
+			</view> -->
+		</view>
+		<view class="page-end">
+			<view class="end-txt">-- END --</view>
 		</view>
 	</view>
 </template>
 
 <script>
 	export default {
+		computed: {
+			cases() {
+				return this.data.filter(item => {
+					return item.zt == this.activeIndex;
+				})
+			}
+		},
 		data() {
 			return {
+				tabList: ['外访中', '已外访', '未通过', '已通过', '已发放'],
 				toolbarShow: false,
-				activeIndex: 1,
+				activeIndex: 0,
 				tabs: 5,
+				data: [
+					{
+						"name": '张三',
+						"age": '27岁',
+						"sex": '男',
+						"time": "2018-03-14 14:00:00",
+						"addr": '四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区',
+						"way": '确认对象地址信息准确性（上传定位信息)',
+						'phone': '18483680709',
+						'price': '40.00',
+						"zt": '0'
+					},
+					{
+						"name": '张三',
+						"age": '27岁',
+						"sex": '男',
+						"time": "2018-03-14 14:00:00",
+						"addr": '四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区',
+						"way": '确认对象地址信息准确性（上传定位信息)',
+						'phone': '18483680709',
+						'price': '40.00',
+						"zt": '1'
+					},
+					{
+						"name": '张三',
+						"age": '27岁',
+						"sex": '男',
+						"time": "2018-03-14 14:00:00",
+						"addr": '四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区',
+						"way": '确认对象地址信息准确性（上传定位信息)',
+						'phone': '18483680709',
+						'price': '40.00',
+						"zt": '2'
+					},
+					{
+						"name": '张三',
+						"age": '27岁',
+						"sex": '男',
+						"time": "2018-03-14 14:00:00",
+						"addr": '四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区',
+						"way": '确认对象地址信息准确性（上传定位信息)',
+						'phone': '18483680709',
+						'price': '40.00',
+						"zt": '3'
+					},
+					{
+						"name": '张三',
+						"age": '27岁',
+						"sex": '男',
+						"time": "2018-03-14 14:00:00",
+						"addr": '四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区',
+						"way": '确认对象地址信息准确性（上传定位信息)',
+						"money": '30.00',
+						'phone': '18483680709',
+						'price': '40.00',
+						"zt": '4'
+					}
+				]
 			};
 		},
-		methods:{
+		methods: {
 			toolBarShowChange() {
 				this.toolbarShow = !this.toolbarShow;
+			},
+			activeTabChange(index) {
+				this.activeIndex = index;
+			},
+			makePhoneCall(phone) {
+				uni.makePhoneCall({
+					phoneNumber: phone //仅为示例
+				});
+			},
+			takDetail(zt) {
+				uni.navigateTo({
+					url: '../../pages/task/task?id=0&zt=' + zt
+				})
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
-	
 	.case-list {
 		padding: 20upx;
 		display: flex;
 		flex-direction: column;
+
 		.case-list-item {
 			position: relative;
 			margin-bottom: 24upx;
@@ -247,6 +331,7 @@
 			background: #fff;
 			// RGBA(0, 198, 116, .1)
 			box-shadow: 5upx 5upx 13upx 4upx #ffffff;
+
 			.tag-img {
 				position: absolute;
 				bottom: 80upx;
@@ -256,22 +341,25 @@
 				opacity: .2;
 				transform: rotate(-30deg);
 			}
+
 			.case-list-item-tag {
 				position: absolute;
 				top: 0;
 				right: 0;
-				background:linear-gradient(to left,#00FA9A, #ADFF2F);
+				background: linear-gradient(to left, #00FA9A, #ADFF2F);
 				opacity: .8;
 				padding: 5upx 30upx;
 				font-size: 14px;
 				color: #fff;
 				border-top-right-radius: 10px;
 				border-bottom-left-radius: 10px;
+
 				.tag-img {
 					width: 30upx;
 					height: 30upx;
 				}
 			}
+
 			.case-list-item-body {
 				display: flex;
 				flex-wrap: nowrap;
@@ -279,6 +367,7 @@
 				font-size: 14px;
 				padding: 30upx 20upx 20upx;
 				border-bottom: 1px solid #f1f1f1;
+
 				.case-item-info {
 					width: 460upx;
 					line-height: 24px;
@@ -286,25 +375,30 @@
 					flex-direction: column;
 					justify-content: space-around;
 					color: #515151;
+
 					.case-item-info-name {
 						display: flex;
 						flex-direction: row;
 						flex-wrap: nowrap;
 						line-height: 30px;
 					}
+
 					.case-item-info-addr {
 						display: flex;
 						flex-direction: row;
 						justify-content: space-around;
+
 						.case-item-info-tt {
 							width: 120upx;
 						}
+
 						.case-item-info-td {
 							align-self: center;
 							width: 330upx;
 						}
 					}
 				}
+
 				.case-item-way {
 					width: 230upx;
 					align-self: center;
@@ -313,21 +407,25 @@
 					padding-top: 10upx;
 				}
 			}
+
 			.case-list-item-foot {
 				display: flex;
 				flex-wrap: nowrap;
 				padding: 20upx;
+
 				.case-item-btn {
 					width: 330upx;
 					display: flex;
 					flex-wrap: nowrap;
 					justify-content: center;
 					border-right: 1px dashed #f1f1f1;
+
 					.btn-img {
 						align-self: center;
 						width: 40upx;
 						height: 40upx;
 					}
+
 					.btn-txt {
 						align-self: center;
 						font-size: 14px;
@@ -335,16 +433,19 @@
 						padding-left: 20upx;
 					}
 				}
+
 				.case-item-btn:last-child {
 					border-right: 0;
 				}
 			}
 		}
-		
+
 	}
+
 	.case-list.marginTop {
-		padding-top: 120upx;
+		padding-top: 140upx;
 	}
+
 	.tabBar-wrapper {
 		position: fixed;
 		top: 100;
@@ -354,7 +455,8 @@
 		flex-direction: column;
 		justify-content: center;
 		padding: 20upx 0upx 8upx;
-		background: linear-gradient(to bottom,#00C674,  #66CC66);
+		background: linear-gradient(to bottom, #00C674, #66CC66);
+
 		.tabBar-icon {
 			align-self: center;
 			width: 100upx;
@@ -364,9 +466,11 @@
 			border-right: 200upx solid transparent;
 			border-top: 20upx solid transparent;
 		}
+
 		.tabBar {
 			display: flex;
 			justify-content: space-around;
+
 			.tabBar-item {
 				font-size: 14px;
 				line-height: 20px;
@@ -375,8 +479,9 @@
 				padding: 5upx 22upx;
 				border-radius: 10%;
 				// margin: 0 5upx;
-				
+
 			}
+
 			.tabBar-item.active {
 				color: #00C674;
 				background: #fff;
@@ -384,57 +489,59 @@
 			}
 		}
 	}
-	
-.cicle-toolbar {
-	position: fixed;
-	bottom: 30%;
-	right: 3%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	z-index: 2000;
-	width: 80upx;
-	height: 80upx;
-	border-radius: 40upx;
-	background:linear-gradient(to bottom, #66CC66,#00B07B);
-	.toolbar-icon {
-		align-self: center;
-		width: 50upx;
-		height: 50upx;
-	}
-}
-.toolbar {
-	position: fixed;
-	bottom: 5%;
-	right: 3%;
-	width: 70upx;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	padding: 40upx 10upx 20upx 10upx;
-	border-radius: 40upx;
-	background:linear-gradient(to bottom, #66CC66,#00B07B);
-	.toolbar-item {
+
+	.cicle-toolbar {
+		position: fixed;
+		bottom: 15%;
+		right: 3%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		align-self: center;
-		margin: 15upx 0;
-	}
-	.toolbar-icon {
-		align-self: center;
-		width: 40upx;
-		height: 40upx;
-	}
-	.toolbar-text {
-		align-self: center;
-		color: #f2f2f2;
-		font-size: 12px;
-		font-weight: 300;
-		margin-top: 5upx;
-	}
-}
+		align-items: center;
+		z-index: 2000;
+		width: 80upx;
+		height: 80upx;
+		border-radius: 40upx;
+		background: linear-gradient(to bottom, #66CC66, #00B07B);
+		box-shadow: 8upx 5upx 10upx 0upx RGBA(0, 198, 116, .3);
 
+		.toolbar-icon {
+			align-self: center;
+			width: 50upx;
+			height: 50upx;
+		}
+	}
 
+	// .toolbar {
+	// 	position: fixed;
+	// 	bottom: 5%;
+	// 	right: 3%;
+	// 	width: 70upx;
+	// 	display: flex;
+	// 	flex-direction: column;
+	// 	justify-content: center;
+	// 	padding: 40upx 10upx 20upx 10upx;
+	// 	border-radius: 40upx;
+	// 	background:linear-gradient(to bottom, #66CC66,#00B07B);
+	// 	.toolbar-item {
+	// 		display: flex;
+	// 		flex-direction: column;
+	// 		justify-content: center;
+	// 		align-self: center;
+	// 		margin: 15upx 0;
+	// 	}
+	// 	.toolbar-icon {
+	// 		align-self: center;
+	// 		width: 40upx;
+	// 		height: 40upx;
+	// 	}
+	// 	.toolbar-text {
+	// 		align-self: center;
+	// 		color: #f2f2f2;
+	// 		font-size: 12px;
+	// 		font-weight: 300;
+	// 		margin-top: 5upx;
+	// 	}
+	// }
+	//
 </style>

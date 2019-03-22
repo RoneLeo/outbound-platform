@@ -11,7 +11,6 @@
 				</cover-view>
 				<cover-view class="tool-box">
 					<cover-view class="img-box">
-						<!-- <video :src="src" @error="videoErrorCallback" controls class="img"></video> -->
 						<cover-image :src="tempsrc" class="img"></cover-image>
 					</cover-view>
 					<cover-view>
@@ -23,7 +22,6 @@
 						</cover-view>
 					</cover-view>
 					<cover-view class="icon-box change-box">
-						<!-- <cover-image :src="src" class="img"></cover-image> -->
 					</cover-view>
 				</cover-view>
 			</camera>
