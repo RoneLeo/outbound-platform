@@ -82,7 +82,7 @@
 			return {
 				tabList: [
 					{label:"基本信息"},
-					{label:"工作信息",},
+					{label:"工作信息"},
 					{label:"联系人信息"},
 					{label:"贷款信息"},
 					{label:"逾期信息"}
@@ -93,7 +93,6 @@
 		onLoad(params) {},
 		methods: {
 			tabchange(activeTab, e) {
-				console.log(activeTab)
 				this.activeTab = activeTab;
 			}
 		}

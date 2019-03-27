@@ -18,8 +18,11 @@
 				<!-- <navigator open-type="navigate" url="/pages/task/task?taskId=1"> -->
 					<view class="case-list-item" v-for="(item, index) in cases" :key="index">
 						<block v-show="item.zt == activeIndex">
-							<view v-if="item.zt !== '0'" class="case-list-item-tag">
-								{{item.zt === '1' ? '请耐心等待审核' : item.zt === '2' ? '审核不通过.' : item.zt === '3' ? '等待发放佣金中...' : '已赚取￥' + item.money }}
+							<view v-if="item.zt !== '0' && item.zt !== '2'" class="case-list-item-tag">
+								{{item.zt === '1' ? '请耐心等待审核' : item.zt === '3' ? '等待发放佣金中...' : '已赚取￥' + item.money }}
+							</view>
+							<view v-if="item.zt === '2'" class="case-list-item-tag" style="background: linear-gradient(to left, #FE6756, #F00000)">
+								审核不通过
 							</view>
 							<image v-if="item.zt === '3'" src="../../static/icon/yes1.png" class="tag-img"></image>
 							<image v-if="item.zt === '2'" src="../../static/icon/no2.png" class="tag-img"></image>
@@ -454,7 +457,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		padding: 20upx 0upx 8upx;
+		padding: 20upx 10upx 8upx;
 		background: linear-gradient(to bottom, #00C674, #66CC66);
 
 		.tabBar-icon {

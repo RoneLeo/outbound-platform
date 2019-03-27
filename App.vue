@@ -4,59 +4,16 @@
 			console.log('App Launch', this.getGlobalUser())
 			if (this.getGlobalUser() === null) {
 				console.log('App Launch' + '需要登录')
-				// 				uni.showLoading({
-				// 					title: '登录中...'
-				// 				});
-				// 				uni.login({
-				// 					provider: "weixin",
-				// 					success: (loginResult) => {
-				// 						// 获得微信登录的code：授权码
-				// 						var code = loginResult.code;
-				// 						setTimeout(function() {
-				// 							uni.hideLoading();
-				// 							uni.switchTab({
-				// 								url: "../../pages/me/me"
-				// 							});
-				// 						}, 3000);
-				// 												uni.request({
-				// 													url: this.$url + "/mpWXLogin/",
-				// 													data: {
-				// 														"code": code,
-				// 													},
-				// 													method: "POST",
-				// 													success(res) {
-				// 														console.log(res);
-				// 														uni.hideLoading();
-				// 														if (res.data.resCode === 200) {
-				// 															//登录成功
-				// 															uni.setStorageSync("globalUser", res.data.data);
-				// 															uni.switchTab({
-				// 																url: "../../pages/me/me"
-				// 															});
-				// 														} else if (res.data.status === 500) {
-				// 															uni.showToast({
-				// 																title: res.data.msg,
-				// 																duration: 2000,
-				// 																image: "../../static/icon/error.png"
-				// 															})
-				// 														} else {
-				// 															//当前页面已是login界面
-				// 															uni.showToast({
-				// 																title: '登录认证失败，请输入你的授权码！',
-				// 																duration: 3000,
-				// 																image: "../../static/icon/error.png"
-				// 															})
-				// 														}
-				// 													}
-				// 												});
-				// 					}
-				// 				});
+			}else {
+				uni.reLaunch({
+					url: '../../pages/index/index'
+				});
 			}
 		},
 		onShow: function() {
 			console.log('App Show', this.getGlobalUser())
 			//清空store
-			this.$store.commit('resetFormData');
+			// this.$store.commit('resetFormData');
 			if (this.getGlobalUser() == null) {
 				console.log('App Show' + '需要登录')
 				//#ifdef MP-WEIXIN
@@ -126,15 +83,10 @@
 								}
 							})
 						}
-
 					}
 				})
 				//#endif
-			} else {
-				uni.reLaunch({
-					url: '../../pages/index/index'
-				});
-			}
+			} 
 		},
 		onHide: function() {
 			console.log('App Hide')

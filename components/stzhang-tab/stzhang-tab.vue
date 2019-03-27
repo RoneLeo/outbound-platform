@@ -1,5 +1,5 @@
 <template>
-	<view :class="{'my-tabs':true,'space-between':formatBe}">
+	<view :class="{'my-tabs':true,'space-around':formatBe}">
 		<view  v-for="(item,index) in getModelData" :key="index" :class="{'tab-item':true,'active':activeIndex==index}" @tap="tap(index)">
 			{{item.label}}
 		</view>
@@ -24,17 +24,17 @@
 			}
 		},
 		computed:{
+			
 			getModelData(){
 				return this.modelData||this.defaultInfo.data
 			},
 			formatBe(){
 				return this.modelData
-						?this.modelData.length>4?true:false
+						?this.modelData.length<4?true:false
 						:false
 			}
 		},
 		onLoad() {
-			console.log(this.modelData)
 		},
 		methods: {
 			tap(index){
@@ -96,8 +96,8 @@
 			animation: test ease 1 1.5s;
 		}
 	}
-	.my-tabs.space-between{
-		justify-content: space-between;
+	.my-tabs.space-around{
+		justify-content: space-around;
 	}
 	@keyframes test{
 		0%{width: 100%}

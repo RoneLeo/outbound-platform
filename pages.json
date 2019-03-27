@@ -1,17 +1,17 @@
 {
     "pages" : [
-		{
-		    "path" : "pages/login/login",
-		    "style" : {
-				"navigationBarTextStyle" : "white",
-				"navigationBarTitleText" : "登录",
-				"navigationBarBackgroundColor" : "#ffd655",
-				"backgroundColor" : "#ffd655",
-				"app-plus" : {
-				    "titleNView" : false
-				}
-			}
-		},
+        {
+            "path" : "pages/login/login",
+            "style" : {
+                "navigationBarTextStyle" : "white",
+                "navigationBarTitleText" : "登录",
+                "navigationBarBackgroundColor" : "#ffd655",
+                "backgroundColor" : "#ffd655",
+                "app-plus" : {
+                    "titleNView" : false
+                }
+            }
+        },
         //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
         {
             "path" : "pages/index/index",
@@ -29,7 +29,7 @@
             "path" : "pages/myCase/myCase",
             "style" : {
                 "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "我的案件",
+                "navigationBarTitleText" : "我的外访任务",
                 "navigationBarBackgroundColor" : "#00C674",
                 "backgroundColor" : "#00C674",
                 "app-plus" : {
@@ -41,7 +41,7 @@
             "path" : "pages/me/me",
             "style" : {
                 "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "我的",
+                "navigationBarTitleText" : "",
                 "navigationBarBackgroundColor" : "#ffd655",
                 "backgroundColor" : "#ffd655",
                 "app-plus" : {
@@ -112,18 +112,18 @@
                 }
             }
         },
-		{
-		    "path" : "pages/modifyTxt/modifyTxt",
-		    "style" : {
-		        "navigationBarTextStyle" : "white",
-		        "navigationBarTitleText" : "修改页面",
-		        "navigationBarBackgroundColor" : "#ffd655",
-		        "backgroundColor" : "#ffd655",
-		        "app-plus" : {
-		            "titleNView" : false
-		        }
-		    }
-		}
+        {
+            "path" : "pages/modifyTxt/modifyTxt",
+            "style" : {
+                "navigationBarTextStyle" : "white",
+                "navigationBarTitleText" : "修改页面",
+                "navigationBarBackgroundColor" : "#ffd655",
+                "backgroundColor" : "#ffd655",
+                "app-plus" : {
+                    "titleNView" : false
+                }
+            }
+        }
     ],
     "permission" : {
         "scope.userLocation" : {
@@ -146,7 +146,7 @@
             },
             {
                 "pagePath" : "pages/myCase/myCase",
-                "text" : "案件",
+                "text" : "任务",
                 "iconPath" : "static/tabBarIco/case.png", //不支持网络图片
                 "selectedIconPath" : "static/tabBarIco/case_sel.png"
             },

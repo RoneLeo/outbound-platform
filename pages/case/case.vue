@@ -45,7 +45,7 @@
 <style lang="scss">
 	.cicle-toolbar {
 		position: fixed;
-		top: 18%;
+		top: 15%;
 		right: 3%;
 		display: flex;
 		flex-direction: column;
@@ -54,6 +54,7 @@
 		width: 100upx;
 		height: 100upx;
 		border-radius: 50upx;
+		z-index: 2000;
 		background:linear-gradient(to bottom, #66CC66,#00B07B);
 		box-shadow: 8upx 5upx 10upx 0upx RGBA(0, 198, 116, .3);
 	}

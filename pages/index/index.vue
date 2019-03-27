@@ -351,6 +351,12 @@
 			}
 		},
 		onLoad() {
+			this.$util.getZDData('D_SYS_RWZTDM', 'JSON').then(res => {
+				console.log(res)
+			})
+			this.$util.getZDData('D_SYS_AJCLFSDM').then(res => {
+				console.log(res)
+			})
 		},
 		methods:{
 			searchMe(e) {

@@ -47,6 +47,19 @@
 		
 		<TabBlock></TabBlock>
 		
+		
+		<view class="task-info" style="font-size: 14px;">
+			<view class="page-block" v-show="moreInfoShow">
+				<view style="height: 300upx;">
+					此处是更多信息。此处是更多信息。此处是更多信息。此处是更多信息。
+				</view>
+			</view>
+			<view @tap="showMoreInfo" style="color: #00C674;padding: 5upx 20upx;">
+				{{btnTxt}}
+			</view>
+		</view>
+		
+		
 		<view class="page-block task-info">
 			<view class="block-name">
 				外访说明
@@ -66,6 +79,7 @@
 				</view>
 			</view>
 		</view>
+		
 	</view>
 </template>
 
@@ -78,13 +92,19 @@
 		},
 		data() {
 			return {
+				moreInfoShow: false,
+				btnTxt: '查看更多相关信息'
 				// toolbarShow: false
 			};
 		},
 		onLoad(params) {},
 		methods: {
+			showMoreInfo() {
+				this.moreInfoShow = !this.moreInfoShow;
+				
+				this.btnTxt = this.moreInfoShow ? '收起更多相关信息' : '查看更多相关信息';
+			},
 			tabchange(index, e) {
-				console.log(index)
 			}
 		}
 	}
@@ -202,7 +222,7 @@
 	}
 
 	.task-info {
-		margin-top: 30upx;
+		margin-top: 20upx;
 		.block-name {
 			font-size: 16px;
 			font-weight: 500;

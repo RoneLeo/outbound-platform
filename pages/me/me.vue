@@ -32,7 +32,7 @@
 				</view>
 			</view>
 			<view class="page-block me-list">
-				<view class="me-list-item">
+				<view class="me-list-item" @tap="gotoStatistics">
 					<view class="list-tt">案件统计报表</view>
 					<image src="../../static/icon/right.png" class="list-right"></image>
 				</view>
@@ -59,7 +59,7 @@
 				userInfo: {}
 			};
 		},
-		onShow() {
+		onLoad() {
 			uni.getUserInfo({
 				provider: 'weixin',
 				success: (infoRes) => {
@@ -67,18 +67,13 @@
 					this.userInfo = infoRes.userInfo;
 				}
 			});
-// 			var me = this;
-// 			// 用户状态的切换
-// 			var userInfo = uni.getStorageSync("globalUser");
-// 			if (userInfo != null && userInfo != "" && userInfo != undefined) {
-// 				me.userIsLogin = true;
-// 				me.userInfo = userInfo;
-// 			} else {
-// 				me.userIsLogin = false;
-// 				me.userInfo = {};
-// 			}
 		},
 		methods: {
+			gotoStatistics() {
+// 				uni.navigateTo({
+// 					url: '../../pages/caseStatistics/caseStatistics',
+// 				});
+			},
 			gotoSetting() {
 				uni.navigateTo({
 					url: '../../pages/setting/setting',
@@ -90,49 +85,4 @@
 
 <style lang="scss">
 	@import './me.css'
-	// 	.page-fill {
-	// 		width:100%;
-	// 		height: 100%;
-	// 		position: relative;
-	// 		.me-img {
-	// 			width: 750upx;
-	// 			height: 270upx;
-	// 			position: absolute;
-	// 			top: 0;
-	// 			left: 0;
-	// 		}
-	// 		.header {
-	// 			display: flex;
-	// 			flex-wrap: nowrap;
-	// 			justify-content: space-between;
-	// 			z-index: 2000;
-	// 			height: 210upx;
-	// 			padding: 30upx;
-	// 			.user-img-wrapper {
-	// 				align-self: center;
-	// 				width: 150upx;
-	// 				height: 150upx;
-	// 				border-radius: 50%;
-	// 				background: #eee;
-	// 				display: flex;
-	// 				justify-content: center;
-	// 				align-items: center;
-	// 				.user-img {
-	// 					width: 100upx;
-	// 					height: 100upx;
-	// 				}
-	// 			}
-	// 			.user-info {
-	// 				width: 450upx;
-	// 				color: #fff;
-	// 				.user-name {
-	// 					font-size: 16px;
-	// 				}
-	// 				.user-zh {
-	// 					font-size: 14px;
-	// 					font-weight: 300;
-	// 				}
-	// 			}
-	// 		}
-	// 	}
 </style>

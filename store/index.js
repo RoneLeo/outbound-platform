@@ -39,6 +39,7 @@ const store = new Vuex.Store({
 		saveFormData(state, form) {
 			const oldForm = state.formData;
 			state.formData = Object.assign(oldForm, form);
+			console.log('state.formData', state.formData);
 		},
 		login(state, provider) {
 			console.log(state)

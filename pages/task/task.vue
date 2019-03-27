@@ -1,16 +1,9 @@
 <template>
 	<view class="page">
+		<HMmessages ref="HMmessages" @complete="HMmessages = $refs.HMmessages" @clickMessage="clickMessage"></HMmessages>
 		<view v-show="toolbarShow" class="mask" @tap="toolBarShowChange">
 			<view v-show="isRecording" class="recording-box">
 				<image src="../../static/icon/record.png" class="recording-img"></image>
-			</view>
-		</view>
-		<view class="cicle-toolbar" v-show="!toolbarShow" @tap="toolBarShowChange">
-			<view style="font-size: 12px;font-weight: 300;color: #FFFFFF;">
-				开始
-			</view>
-			<view style="font-size: 12px;font-weight: 300;color: #FFFFFF;">
-				外访
 			</view>
 		</view>
 		<view class="toolbar" v-show="toolbarShow">
@@ -30,19 +23,30 @@
 				<image src="../../static/icon/down.png" class="toolbar-icon"></image>
 			</view>
 		</view>
-		
+		<view class="cicle-toolbar" v-show="!toolbarShow" @tap="toolBarShowChange">
+			<view style="font-size: 12px;font-weight: 300;color: #FFFFFF;">
+				开始
+			</view>
+			<view style="font-size: 12px;font-weight: 300;color: #FFFFFF;">
+				外访
+			</view>
+		</view>
+
+
 		<BasicCase :tagTxt="tabList[zt]"></BasicCase>
-		
+
 		<view class="page-block task-info record-block">
 			<view class="block-name">
 				本次催单记录表
 				<view class="save-btn">上 传</view>
+				<view class="save-btn" @tap="clearState" style="margin-right: 10upx;">清 空</view>
 			</view>
 			<view class="record-list">
 				<view class="record-item">
 					<view class="record-item-tt over-text">定 位</view>
 					<view class="record-item-td addr-block">
-						<textarea :value="addressName" auto-height @change="addressChange" @blur="addressChange" @confirm="addressChange"  class="addr-textarea" />
+						<textarea v-model="addressName" auto-height @change="addressChange" @blur="addressChange" @confirm="addressChange"
+						 class="addr-textarea" />
 						<view @tap="getLocation()" class="addr-btn">获取定位</view>
 					</view>
 				</view>
@@ -73,9 +77,9 @@
 							<image v-show="!audio.isPlaying" src="../../static/icon/play.png" class="audio-icon" @tap="playAudio(audioIndex)"></image>
 							<image v-show="audio.isPlaying" src="../../static/icon/pause.png" class="audio-icon" @tap="playAudio(audioIndex)"></image>
 							<view class="audio-progress">
-								<progress percent="20" stroke-width="3" activeColor="#ffffff" backgroundColor="#aaaaaa" />
+								<progress :percent="audio.percent" stroke-width="3" activeColor="#ffffff" backgroundColor="#aaaaaa" />
 							</view>
-							<view class="audio-length">0:10</view>
+							<view class="audio-length">{{audio.audio.time}}</view>
 							<image src="../../static/icon/delete.png" class="audio-delete" @tap="deleteAudio(audioIndex)"></image>
 						</view>
 					</view>
@@ -102,6 +106,7 @@
 	import BasicCase from '../../components/basic-case/basic-case.vue'
 	import amap from '../../lib/amap-wx.js'
 	import util from '../../utils/util.js'
+	import HMmessages from '../../components/HM-messages/HM-messages'
 	import { mapState, mapMutations } from 'vuex'
 	
 	export default {
@@ -142,21 +147,20 @@
 			}
 		},
 		components:{
-			BasicCase
+			BasicCase,
+			HMmessages
 		},
 		data() {
 			return {
 				recorderManager: {},
 				innerAudioContext: {},
+				innerAudioContexts: [],
+				audioFileSrcs: [],
 				amapPlugin: null,  
 				amapKey: '4e8af665cf89ce76c04389a0719c67a5',
-				// imgSrcList: this.$store.state.formData.imgs,
-				toolbarShow: false,
-				// addressName: this.$store.state.formData.wz,
-				// audioSrcList: this.$store.state.formData.audios,
 				txt: '长按录音',
 				isRecording: false,
-				
+				toolbarShow: false,
 				
 				tabList: ['外访中', '已外访', '未通过', '已通过', '已发放'],
 				zt: '0'
@@ -172,21 +176,65 @@
 					uni.getRecorderManager()
 				}
 			});
-// 			uni.authorize({
-// 				scope: 'scope.userLocation',
-// 				success: () => {
-// 					this.getLocation()
-// 				}
-// 			});
+			uni.authorize({
+				scope: 'scope.userLocation',
+				success: () => {
+					this.getLocation()
+				}
+			});
 			this.amapPlugin = new amap.AMapWX({key:this.amapKey});
 			//#endif
 			
 			this.recorderManager = uni.getRecorderManager();
 			this.innerAudioContext = uni.createInnerAudioContext();
+			this.recorderManager.onError((res) => {
+				console.log('录音错误', res)
+			})
+			
+			this.recorderManager.onStop((res) => {
+				console.log("结束录音", res)
+				this.txt = '长按录音';
+				const { tempFilePath, duration } = res;
+				uni.saveFile({
+					tempFilePath: tempFilePath,
+					success: (res) => {
+						this.audioFileSrcs.push(res.savedFilePath);
+						setTimeout(() => {
+							if (duration < 1000) {
+								console.log('录音时间太短');
+							} else {
+								let audioSrc = Object.assign({}, {
+										audio: {
+											src: tempFilePath,
+											date: util.formatTime(new Date()),
+											duration: duration > 0 ? duration : 0,
+											time: util.formateMSecond(Math.round(duration * 10) / 10)
+										},
+										percent: 0,
+										isPlaying: false
+									});
+								let arr = new Array(audioSrc);
+																	
+								let tempArr = this.audioSrcList;
+								tempArr = tempArr.concat(arr);
+								this.saveFormData({audios: tempArr});
+							}
+						}, 500)
+					},
+					fail: (res) => {
+						console.log('录音文件保存失败')
+					},
+					complete: (res) => {
+						console.log('录音文件保存完成')
+					}
+				})
+			})
 		},
 		methods:{
-			
-			...mapMutations(['saveFormData']),
+			...mapMutations(['saveFormData', 'resetFormData']),
+			clearState() {
+				this.resetFormData();
+			},
 			addressChange(e) {
 				let data = e.detail.value;
 				this.addressName = data;
@@ -206,18 +254,44 @@
 				});
 			},
 			playAudio(index) {
-				this.innerAudioContext.play();
-				this.innerAudioContext.onPlay(() => {
-					this.audioSrcList[index].isPlaying = true;
-					console.log('开始播放')
-				});
-				this.innerAudioContext.onTimeUpdate(() => {
-					const time = Math.floor(this.audioSrcList[index].audio.duration / 0.25);
-					console.log('监听进度', time);
-				});
-				this.innerAudioContext.onEnded( () => {
-					this.audioSrcList[index].isPlaying = false;
-				});
+				if(this.audioSrcList[index].isPlaying) {
+					this.innerAudioContext.stop()
+					this.innerAudioContext.onStop( () => {
+						console.log('stop')
+						this.audioSrcList[index].isPlaying = false;
+					})
+				}else {
+					console.log(index, this.audioSrcList[index], this.audioFileSrcs[index],  this.innerAudioContext)
+					this.innerAudioContext.src = this.audioFileSrcs[index];
+					this.innerAudioContext.play();
+					
+					this.innerAudioContext.onPlay(() => {
+						console.log('开始播放')
+						for(let i = 0; i < this.audioSrcList.length; i ++) {
+							this.audioSrcList[i].isPlaying = (i!= index) ? false : true;
+						}
+					});
+					
+					this.innerAudioContext.onTimeUpdate(() => {
+						console.log('进度更新', this.innerAudioContext.currentTime, this.innerAudioContext.duration, this.audioSrcList[index].audio.duration)
+						// const time = Math.floor(this.audioSrcList[index].audio.duration / 250);
+						// this.audioSrcList[index].percent = this.audioSrcList[index].percent + Math.ceil(100 / time);
+						const time = this.innerAudioContext.currentTime, duration = this.innerAudioContext.duration;
+						this.audioSrcList[index].percent = (time/duration)*100
+					})
+							
+					this.innerAudioContext.onEnded(() => {
+						console.log('播放结束')
+						this.audioSrcList[index].isPlaying = false;
+						this.audioSrcList[index].percent = 100;
+					});
+					this.innerAudioContext.onError((res) => {
+						this.audioSrcList[index].isPlaying = false;
+						console.log('播放出错', res);
+					});
+					
+						
+				}
 			},
 			audioLongTap() {
 
@@ -233,32 +307,8 @@
 			},
 			bindStopAudio() {
 				this.recorderManager.stop();
-				this.recorderManager.onStop((res) => {
-					this.txt = '长按录音';
-					const { tempFilePath } = res;
-					this.innerAudioContext.src = tempFilePath;
-					setTimeout(() => {
-// 						if (s < 1) {
-// 							console.log('录音时间太短');
-// 						} else {
-							let audioSrc = Object.assign({}, {
-								audio: {
-									src: tempFilePath,
-									date: util.formatTime(new Date()),
-									duration: this.innerAudioContext.duration,
-									time: util.formateSecond(Math.round(this.innerAudioContext.duration * 10) / 10)
-								},
-								percent: 0,
-								isPlaying: false
-							});
-							let arr = new Array(audioSrc);
-							
-							let tempArr = this.audioSrcList;
-							tempArr = tempArr.concat(arr);
-							this.saveFormData({audios: tempArr});
-						// }
-					}, 500)
-				})
+				console.log("this.recorderManager.stop")
+				
 			},
 			bindRecordAudio() {
 				const options = { //录音配置选项
@@ -266,7 +316,7 @@
 					sampleRate: 44100,
 					numberOfChannels: 1,
 					encodeBitRate: 192000,
-					format: 'aac'
+					format: 'mp3'
 				}
 				this.recorderManager.start(options);
 				this.isRecording = true;
@@ -286,39 +336,18 @@
 					}
 				});
 			},
-			getAddrName() {  
-				uni.showLoading({  
-					title: '获取信息中'  
-				});  
-				this.amapPlugin.getRegeo({
-					success: (data) => {  
-						console.log(data)  
-						this.addressName = data.geocodes.formatted_address;  
-						console.log(this.addressName)
-						uni.hideLoading();  
-					},
-					fail: (info) => {
-						console.log(info)
-					}
-				});  
-			},
-			getLocation(e) {
-				console.log(e)
+			getLocation() {
 				uni.getLocation({
-					type: 'wgs84',
+					type: 'gcj02',
 					success: (res) => {
-						console.log(res)
-						console.log('当前位置的经度：' + res.longitude);
-						console.log('当前位置的纬度：' + res.latitude);
 						this.amapPlugin.getRegeo({
 							success: (data) => {  
-								console.log(data)  
+								console.log(res)
+								console.log('getRegeo', data);
 								this.addressName = data[0].regeocodeData.formatted_address;  
-// 								console.log(this.addressName)
-// 								uni.hideLoading();  
 							},
 							fail: (info) => {
-								console.log(info)
+								this.HMmessages.show('获取地址失败，请自己填写！', {icon: 'success', closeButton: true, duration: 3000})
 							}
 						});  
 					}
@@ -332,6 +361,7 @@
 			deleteAudio(index) {
 				let tempArr = this.audioSrcList;
 				tempArr.splice(index,1);
+				this.audioFileSrcs.splice(index, 1);
 				this.saveFormData({audios: tempArr});
 			},
 			deleteImg(index) {
@@ -341,10 +371,9 @@
 			},
 			previewImgs(index) {
 				//#ifdef APP-PLUS || MP-WEIXIN
-				console.log(index);    //这里打印为undefined
+				console.log(index);  
 				var me = this;
 				var imgIndex = index;
-				// var imgIndex = e.currentTarget.dataset.imgindex;   //这里报错
 				var newStaffArray = [];
 				newStaffArray = newStaffArray.concat(me.imgSrcList);
 				

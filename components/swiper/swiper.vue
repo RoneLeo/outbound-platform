@@ -48,7 +48,7 @@
 	
 	.swiperitem {
 		/* height: 500rpx; */
-		height: 305upx;
+		height: 290upx;
 		padding: 0upx 10upx;
 		box-sizing: border-box;
 		position: relative;
@@ -57,7 +57,7 @@
 	.itemImg {
 		position: absolute;
 		width: 98%;
-		height: 305upx;
+		height: 290upx;
 		border-radius: 15rpx;
 		opacity: 0.7;
 		top: 5%;

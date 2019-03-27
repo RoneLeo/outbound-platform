@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import App from './App'
 import Store from './store/index.js'
+import util from './utils/util.js'
 
 Vue.config.productionTip = false
 
 Vue.prototype.$staticUrl = 'http://182.151.22.247:8083/files'
 Vue.prototype.$url = 'http://www.chiy.online:8083'
 Vue.prototype.$store = Store
+Vue.prototype.$util = util
 Vue.prototype.$setting = {swiper: true}
 Vue.prototype.getGlobalUser = function(key) {
 	var userInfo = uni.getStorageSync("globalUser");
@@ -16,6 +18,7 @@ Vue.prototype.getGlobalUser = function(key) {
 		return null;
 	}
 }
+// Vue.prototype.$postData = util.requestDataByPost()
 
 Vue.prototype.$postData = function(object) {
 	const {url, data, success} = object
