@@ -63,7 +63,6 @@
 			uni.getUserInfo({
 				provider: 'weixin',
 				success: (infoRes) => {
-					console.log('用户昵称为：' + infoRes.userInfo.avatarUrl);
 					this.userInfo = infoRes.userInfo;
 				}
 			});

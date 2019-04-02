@@ -1,92 +1,112 @@
 <script>
 	export default {
 		onLaunch: function() {
-			console.log('App Launch', this.getGlobalUser())
-			if (this.getGlobalUser() === null) {
-				console.log('App Launch' + '需要登录')
-			}else {
-				uni.reLaunch({
-					url: '../../pages/index/index'
-				});
-			}
+			// uni.clearStorage();
+			console.log('App Launch')
 		},
 		onShow: function() {
-			console.log('App Show', this.getGlobalUser())
-			//清空store
-			// this.$store.commit('resetFormData');
-			if (this.getGlobalUser() == null) {
-				console.log('App Show' + '需要登录')
-				//#ifdef MP-WEIXIN
-				//用户信息授权
-				uni.getSetting({
-					success: res => {
-						console.log(res.authSetting)
-						if (res.authSetting['scope.userInfo']) {
-							uni.login({
-								provider: "weixin",
-								success: (loginResult) => {
-									var code = loginResult.code,
-										encryptedData = '',
-										iv = '';
-									uni.getUserInfo({
-										provider: 'weixin',
-										success: (infoRes) => {
-											encryptedData = infoRes.encryptedData;
-											iv = infoRes.iv;
-											uni.showLoading({
-												title: '登录认证中...'
-											});
-											this.$postData({
-												url: "/user/weLogin",
-												data: {
-													"code": code,
-													"sqm": '',
-													"encryptedData": encryptedData,
-													"iv": iv
-												},
-												success: res => {
-													uni.hideLoading();
-													console.log('登录接口返回：', res.data)
-													if (res.data.resCode === 200) {
+			// uni.clearStorage();
+			console.log('App Show', this.getGlobalUser(), this.getSessionId())
+			if (this.getGlobalUser() == null || this.getSessionId() == null) {
+				let pages = getCurrentPages();
+				if (pages.length && pages[pages.length - 1].route != 'pages/login/login') { //当前界面不是login.vue
+					//#ifdef MP-WEIXIN
+					wx.getSetting({
+						success: res => {
+							if (res.authSetting['scope.userInfo']) { //已经授权的话，就尝试登录
+								uni.login({
+									provider: "weixin",
+									success: (loginResult) => {
+										var code = loginResult.code,
+											encryptedData = '',
+											iv = '';
+										uni.getUserInfo({
+											provider: 'weixin',
+											success: (infoRes) => {
+												encryptedData = infoRes.encryptedData;
+												iv = infoRes.iv;
+
+												this.$api.test('/user/weLogin', {
+													code: code,
+													sqm: '',
+													encryptedData: encryptedData,
+													iv: iv
+												}).then(res => {
+													if (res.resCode === 200) {
 														//登录成功
-														uni.setStorageSync("globalUser", res.data.data);
+														uni.setStorageSync("globalUser", res.data.userInfo);
+														uni.setStorageSync("sessionId", res.data.sessionId);
 														uni.switchTab({
-															url: "../../pages/me/me"
+															url: "../../pages/index/index"
 														});
-													} else if (res.data.status === 500) {
-														uni.showToast({
-															title: res.data.resMsg,
-															duration: 2000,
-															image: "../../static/icon/error.png"
-														})
 													} else {
-														//当前界面不一定是登录界面
-														//判断当前页面是否是登录界面
-														let pages = getCurrentPages();
-														if (pages.length && pages[pages.length - 1].route != 'page/login/login') {
-															console.log(pages.length, pages[pages.length - 1].route, pages[pages.length - 1].route !=
-																'page/login/login')
-															uni.redirectTo({
-																url: '../../pages/login/login'
-															})
-														}
-														uni.showToast({
-															title: '认证失败',
-															duration: 1000,
-															image: "../../static/icon/error.png"
-														});
+														uni.redirectTo({
+															url: '../../pages/login/login'
+														})
 													}
-												}
-											})
+												})
+											},
+											complete: res => {
+												console.log('uni getUserInfo', res)
+											}
+										});
+									},
+									complete: res => {
+										console.log('uni login', res)
+									}
+								})
+							} else {
+								uni.redirectTo({
+									url: '../../pages/login/login'
+								})
+							}
+						},
+					})
+					//#endif
+				} else { //当前在login.vue
+					//#ifdef MP-WEIXIN
+					uni.login({
+						provider: "weixin",
+						success: (loginResult) => {
+							var code = loginResult.code,
+								encryptedData = '',
+								iv = '';
+							uni.getUserInfo({
+								provider: 'weixin',
+								success: (infoRes) => {
+									encryptedData = infoRes.encryptedData;
+									iv = infoRes.iv;
+									console.log('code');
+									console.log(code, encryptedData, iv)
+									this.$api.test('/user/weLogin', {
+										code: code,
+										sqm: '',
+										encryptedData: encryptedData,
+										iv: iv
+									}).then(res => {
+										console.log(res)
+										if (res.resCode === 200) {
+											uni.setStorageSync("globalUser", res.data.userInfo);
+											uni.setStorageSync("sessionId", res.data.sessionId);
+											let pages = getCurrentPages();
+											if (pages.length > 1) {
+												uni.navigateBack()
+											}
 										}
-									});
+									})
+								},
+								complete: (res) => {
+									console.log('uni getUserInfo', res);
 								}
-							})
-						}
-					}
-				})
-				//#endif
-			} 
+							});
+						},
+						complete: (res) => {
+							console.log('uni login', res);
+						},
+					})
+					//#endif
+				}
+			}
 		},
 		onHide: function() {
 			console.log('App Hide')

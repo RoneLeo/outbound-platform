@@ -351,11 +351,12 @@
 			}
 		},
 		onLoad() {
-			this.$util.getZDData('D_SYS_RWZTDM', 'JSON').then(res => {
-				console.log(res)
-			})
-			this.$util.getZDData('D_SYS_AJCLFSDM').then(res => {
-				console.log(res)
+			let id = uni.getStorageSync("globalUser").id;
+			this.$api.test('/user/changePassword', {id: id, mm: '666666'}).then((res)=>{
+				console.log('请求结果 : ' + JSON.stringify(res))
+			}).catch((err)=>{
+				this.loading = false;
+				console.log('request fail', err);
 			})
 		},
 		methods:{

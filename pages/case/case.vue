@@ -32,6 +32,13 @@
 		},
 		onLoad(params) {
 			console.log(params, params.caseId)
+			let id = uni.getStorageSync("globalUser").id;
+			this.$api.test('/user/changePassword', {id: id, mm: '666666'}).then((res)=>{
+				console.log('请求结果 : ' + JSON.stringify(res))
+			}).catch((err)=>{
+				this.loading = false;
+				console.log('request fail', err);
+			})
 		},
 		methods:{
 			toolBarShowChange() {

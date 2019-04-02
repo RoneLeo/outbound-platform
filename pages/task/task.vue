@@ -168,6 +168,14 @@
 		},
 		onLoad(params) {
 			console.log(params, params.id, params.zt)
+			let id = uni.getStorageSync("globalUser").id;
+			this.$api.test('/user/changePassword', {id: id, mm: '666666'}).then((res)=>{
+				console.log('请求结果 : ' + JSON.stringify(res))
+			}).catch((err)=>{
+				this.loading = false;
+				console.log('request fail', err);
+			})
+			
 			this.zt = Number(params.zt)
 			//#ifdef MP-WEIXIN
 			uni.authorize({
@@ -176,12 +184,12 @@
 					uni.getRecorderManager()
 				}
 			});
-			uni.authorize({
-				scope: 'scope.userLocation',
-				success: () => {
-					this.getLocation()
-				}
-			});
+// 			uni.authorize({
+// 				scope: 'scope.userLocation',
+// 				success: () => {
+// 					this.getLocation()
+// 				}
+// 			});
 			this.amapPlugin = new amap.AMapWX({key:this.amapKey});
 			//#endif
 			

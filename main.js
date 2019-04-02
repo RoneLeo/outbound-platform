@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import App from './App'
 import Store from './store/index.js'
-import util from './utils/util.js'
+import util from '@/common/util.js'
+import api from '@/common/request-http/'
+
+Vue.prototype.$api = api
 
 Vue.config.productionTip = false
 
@@ -18,17 +21,45 @@ Vue.prototype.getGlobalUser = function(key) {
 		return null;
 	}
 }
-// Vue.prototype.$postData = util.requestDataByPost()
+Vue.prototype.getSessionId = function(key) {
+	var sessionId = uni.getStorageSync("sessionId");
+	if (sessionId != null && sessionId != "" && sessionId != undefined) {
+		return sessionId;
+	} else {
+		return null;
+	}
+}
 
 Vue.prototype.$postData = function(object) {
 	const {url, data, success} = object
+	let header = {
+		'content-type': 'application/x-www-form-urlencoded',
+		'cookie': 'JSESSIONID=' + uni.getStorageSync("sessionId")
+	}
+	if(url.indexOf("Login") != -1) {   //如果是登录接口
+		header = {
+			'content-type': 'application/x-www-form-urlencoded'
+		}
+	}
 	uni.request({
 		url: this.$url + url,
 		data: data,
-		header: {
-			'Content-Type':'application/x-www-form-urlencoded'
-		},
+		header: header,
 		method: "POST",
+		success: success
+	});
+}
+
+
+
+Vue.prototype.$getData = function(object) {
+	const {url, success} = object
+	let header = {
+		'content-type': 'application/x-www-form-urlencoded',
+	}
+	uni.request({
+		url: this.$url + url,
+		method: "GET",
 		success: success
 	});
 }

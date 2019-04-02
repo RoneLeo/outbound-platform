@@ -36,10 +36,10 @@
 	let interval = '', interval5 = '';
 	export default {
 		computed:{
-			...mapState(['formData']),
+			...mapState(['formDataArr']),
 			videoSrcList: {
 				get () {
-					return this.$store.state.formData.videos
+					return this.$store.state.formDataArr.filter(form => form.taskId == this.taskId)[0].videos
 				}
 			},
 		},
@@ -51,7 +51,8 @@
 				tempsrc: '',
 				recordTime: 0,
 				time: '00:00',
-				isbling: false
+				isbling: false,
+				taskId: 0
 			};
 		},
 		onUnload() {
@@ -88,7 +89,7 @@
 						
 						let temp = this.videoSrcList;
 						temp = temp.concat(arr);
-						this.$store.commit('saveFormData', {videos: temp});
+						this.$store.commit('saveFormData', {videos: temp}, this.taskId);
 					},
 					fail: (res) => {
 						this.HMmessages.show('Error！', {
