@@ -26,7 +26,7 @@
 												encryptedData = infoRes.encryptedData;
 												iv = infoRes.iv;
 
-												this.$api.test('/user/weLogin', {
+												this.$api.post('/user/weLogin', {
 													code: code,
 													sqm: '',
 													encryptedData: encryptedData,
@@ -46,12 +46,12 @@
 													}
 												})
 											},
-											complete: res => {
+											fail: res => {
 												console.log('uni getUserInfo', res)
 											}
 										});
 									},
-									complete: res => {
+									fail: res => {
 										console.log('uni login', res)
 									}
 								})
@@ -76,15 +76,12 @@
 								success: (infoRes) => {
 									encryptedData = infoRes.encryptedData;
 									iv = infoRes.iv;
-									console.log('code');
-									console.log(code, encryptedData, iv)
-									this.$api.test('/user/weLogin', {
+									this.$api.post('/user/weLogin', {
 										code: code,
 										sqm: '',
 										encryptedData: encryptedData,
 										iv: iv
 									}).then(res => {
-										console.log(res)
 										if (res.resCode === 200) {
 											uni.setStorageSync("globalUser", res.data.userInfo);
 											uni.setStorageSync("sessionId", res.data.sessionId);
@@ -95,12 +92,12 @@
 										}
 									})
 								},
-								complete: (res) => {
+								fail: (res) => {
 									console.log('uni getUserInfo', res);
 								}
 							});
 						},
-						complete: (res) => {
+						fail: (res) => {
 							console.log('uni login', res);
 						},
 					})
@@ -152,22 +149,24 @@
 	}
 
 	.list-item-tt {
-		width: 180upx;
+		align-self: flex-start;
+		width: 220upx;
 		color: #2a3a4a;
 		text-align: right;
 	}
 
 	.list-item-td {
 		align-self: center;
-		width: 510upx;
+		width: 470upx;
 		color: #34495e;
 	}
 
 	.page-end {
-		height: 60upx;
+		/* height: 60upx; */
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		padding: 15upx;
 	}
 
 	.end-txt {

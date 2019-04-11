@@ -57,40 +57,53 @@
 }
 
 .cases-item {
+	position: relative;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	padding: 20upx 20upx;
 	border-bottom: 1px dashed #f2f2f2;
-	z-index: 100;
+	/* z-index: 100; */
 }
 .no-border {
 	border-bottom: 1px dashed transparent;
 }
 .case-txt {
+	align-items: flex-start;
 	color: #616161;
 	font-size: 14px;
-	overflow: hidden;
+	/* overflow: hidden;
 	white-space: nowrap;
-	text-overflow: ellipsis;
+	text-overflow: ellipsis; */
 	text-align: center;
 }
 
 .case-id {
-	width: 210upx;
+	width: 200upx;
+	
 }
 .case-name {
-	width: 140upx;
+	width: 170upx;
 }
 .case-date {
 	width: 200upx;
 }
 .case-status{
-	width: 160upx;
+	width: 140upx;
 	color: #00B07B
 }
 .case-title {
 	color: #353535;
 	font-weight: 400;
 	font-size: 16px;
+	text-align: center;
+}
+
+.appoint-case {
+	position: absolute;
+	top: 10upx;
+	left: 10upx;
+	width: 40upx;
+	height: 40upx;
+	align-self: center;
 }

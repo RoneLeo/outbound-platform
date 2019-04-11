@@ -77,9 +77,20 @@ const formateSecondDigital = s => {
     return res;
 }
 
+const parseJSON = (dictId, dictArr) => {
+	let res = '';
+	dictArr.forEach(item => {
+		if(item.ctdm == dictId) {
+			res = item.ctmc;
+		}
+	})
+	return res;
+}
+
 module.exports = {
     formatTime: formatTime,
     formateSecond: formateSecond,
     formateSecondDigital: formateSecondDigital,
-	formateMSecond: formateMSecond
+	formateMSecond: formateMSecond,
+	parseJSON: parseJSON
 }

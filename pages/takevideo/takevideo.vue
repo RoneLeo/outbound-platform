@@ -2,7 +2,7 @@
 	<view>
 		<view class="page">
 			<HMmessages ref="HMmessages" @complete="HMmessages = $refs.HMmessages" @clickMessage="clickMessage"></HMmessages>
-			<camera  class="camera" device-position="back" flash="off" @error="cameraError" @stop="cameraStop">
+			<camera class="camera" device-position="back" flash="off" mode="normal" @error="cameraError" @stop="cameraStop">
 				<cover-view v-show="isRecording" class="record-time">
 					<cover-view class='record-bling'>
 						<cover-view v-show="isbling" class='bling'></cover-view>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-	import util from '../../utils/util.js'
+	// import util from '../../utils/util.js'
 	import { mapState, mapMutations } from 'vuex'
 
 	let interval = '', interval5 = '';
@@ -39,7 +39,7 @@
 			...mapState(['formDataArr']),
 			videoSrcList: {
 				get () {
-					return this.$store.state.formDataArr.filter(form => form.taskId == this.taskId)[0].videos
+					return this.$store.state.formData.videos
 				}
 			},
 		},
@@ -74,7 +74,7 @@
 					this.stopRecord();
 				} else {
 					this.recordTime = 0;
-					this.time = util.formateSecondDigital(this.recordTime);
+					this.time = this.$util.formateSecondDigital(this.recordTime);
 					this.startRecord();
 				}
 			},
@@ -82,14 +82,21 @@
 				this.ctx.stopRecord({
 					success: (res) => {
 						this.tempsrc = res.tempThumbPath;
-						this.src = res.tempVideoPath;
-						this.isRecording = false;
-						this.isbling = false;
-						let arr = new Array(this.src);
-						
-						let temp = this.videoSrcList;
-						temp = temp.concat(arr);
-						this.$store.commit('saveFormData', {videos: temp}, this.taskId);
+						let tempVideoPath = res.tempVideoPath;
+						uni.saveFile({
+							tempFilePath: res.tempVideoPath,
+							success: (res) => {
+								console.log('视频的路径：', res.savedFilePath)
+								this.src = res.savedFilePath
+								this.isRecording = false;
+								this.isbling = false;
+								let arr = new Array(this.src);
+								
+								let temp = this.videoSrcList;
+								temp = temp.concat(arr);
+								this.$store.commit('saveFormData', {videos: temp}, this.taskId);
+							}
+						})
 					},
 					fail: (res) => {
 						this.HMmessages.show('Error！', {
@@ -119,7 +126,7 @@
 				});
 				interval = setInterval(() => {
 					this.recordTime = this.recordTime + 1;
-					this.time = util.formateSecondDigital(this.recordTime);
+					this.time = this.$util.formateSecondDigital(this.recordTime);
 				}, 1000);
 				interval5 = setInterval(() => {
 					this.isbling = !this.isbling;

@@ -1,9 +1,9 @@
 <template>
-	<view class="page">
+	<view class="page" @touchstart='touchStart' @touchmove='touchMove' @touchend='touchEnd'>
 		<view v-show="toolbarShow" class="tabBar-wrapper">
 			<view class="tabBar">
-				<view v-for="(item, index) in tabList" :key="index" @tap="activeTabChange(index)" :class="{'tabBar-item':true,'active':activeIndex==index}">
-					{{item}}
+				<view v-for="(item, index) in tabList" :key="index" @tap="activeTabChange(item.type)" :class="{'tabBar-item':true,'active':activeIndex==item.type}">
+					{{item.label}}
 				</view>
 			</view>
 			<image src="../../static/icon/close.png" class="tabBar-icon" @tap="toolBarShowChange"></image>
@@ -13,306 +13,257 @@
 			<image src="../../static/icon/filter.png" class="toolbar-icon"></image>
 		</view>
 
-		<view :class="{'case-list':true,'marginTop':toolbarShow}">
+		<view :class="{'case-list':true,'marginTop':toolbarShow}" ref='btnImg'>
 			<view>
 				<!-- <navigator open-type="navigate" url="/pages/task/task?taskId=1"> -->
-					<view class="case-list-item" v-for="(item, index) in cases" :key="index">
-						<block v-show="item.zt == activeIndex">
-							<view v-if="item.zt !== '0' && item.zt !== '2'" class="case-list-item-tag">
-								{{item.zt === '1' ? '请耐心等待审核' : item.zt === '3' ? '等待发放佣金中...' : '已赚取￥' + item.money }}
-							</view>
-							<view v-if="item.zt === '2'" class="case-list-item-tag" style="background: linear-gradient(to left, #FE6756, #F00000)">
-								审核不通过
-							</view>
-							<image v-if="item.zt === '3'" src="../../static/icon/yes1.png" class="tag-img"></image>
-							<image v-if="item.zt === '2'" src="../../static/icon/no2.png" class="tag-img"></image>
-							<view class="case-list-item-body" @tap="takDetail(item.zt)">
-								<view class="case-item-info">
-									<view class="case-item-info-name">
-										{{item.name}}
-										<view style="color: #999;margin-left: 18upx;">{{item.age}}</view>
-										<view style="color: #999;margin-left: 18upx;">{{item.sex}}</view>
-									</view>
-									<view class="case-item-info-addr">
-										<view class="case-item-info-tt">外访地址</view>
-										<view class="case-item-info-td">
-											{{item.addr}}
-										</view>
-									</view>
-								</view>
-								<view class="case-item-way">
-									{{item.way}}
-								</view>
-							</view>
-							<view class="case-list-item-foot">
-								<view class="case-item-btn">
-									<image src="../../static/icon/money.png" class="btn-img"></image>
-									<view class="btn-txt">￥{{item.price}}</view>
-								</view>
-								<view class="case-item-btn" @tap="makePhoneCall(item.phone)">
-									<image src="../../static/icon/phone.png" class="btn-img"></image>
-									<view class="btn-txt">{{item.phone}}</view>
-								</view>
-							</view>
-						</block>
+				<view class="case-list-item" v-for="(item, index) in cases" :key="index">
+					<view v-if="item.rwxx.rwzt == 3" class="case-list-item-tag">
+						{{item.rwxx.rwjzsj}}
 					</view>
-				<!-- </navigator> -->
-			</view>
-			<!-- <view class="case-list-item">
-				<view class="case-list-item-tag">
-					请耐心等待审核
-				</view>
-				<view class="case-list-item-body">
-					<view class="case-item-info">
-						<view class="case-item-info-name">
-							张三
-							<view style="color: #999;margin-left: 18upx;">27岁</view>
-							<view style="color: #999;margin-left: 18upx;">男</view>
-						</view>
-						<view class="case-item-info-addr">
-							<view class="case-item-info-tt">外访时间</view>
-							<view class="case-item-info-td">
-								2018-03-14 14:00:00
+					<view v-if="item.rwxx.rwzt !== 1 && item.rwxx.rwzt !== 2 && item.rwxx.rwzt !== 3" class="case-list-item-tag">
+						{{item.rwxx.rwzt === 4 ? '请耐心等待审核' : item.rwxx.rwzt === 6 ? '等待发放佣金中...' : '已赚取￥' }}
+					</view>
+					<view v-if="item.rwxx.rwzt === 5" class="case-list-item-tag" style="background: linear-gradient(to left, #FE6756, #F00000)">
+						审核不通过
+					</view>
+					<image v-if="item.rwxx.rwzt === 6" src="../../static/icon/yes1.png" class="tag-img"></image>
+					<image v-if="item.rwxx.rwzt === 5" src="../../static/icon/no2.png" class="tag-img"></image>
+					<view class="case-list-item-body" @tap="takDetail(item.rwxx.ajid, item.rwxx.id)">
+						<view class="case-item-info">
+							<view class="case-item-info-name">
+								{{item.arxx && item.arxx.armc}}
+								<view style="color: #999;margin-left: 18upx;">{{item.arxx && item.arxx.arxb}}</view>
+								<view style="color: #999;margin-left: 18upx;">{{item.arxx && item.arxx.hjdz}}</view>
+							</view>
+							<view class="case-item-info-addr">
+								<view class="case-item-info-tt">外访描述</view>
+								<view class="case-item-info-td">
+									{{item.rwxx && item.rwxx.rwms}}
+								</view>
 							</view>
 						</view>
-						<view class="case-item-info-addr">
-							<view class="case-item-info-tt">外访地址</view>
-							<view class="case-item-info-td">
-								四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区
-							</view>
+						<view class="case-item-way">
+							{{item.rwxx && item.rwxx.rwfs1}}
 						</view>
 					</view>
-					<view class="case-item-way">
-						确认案件对象信息完整
-					</view>
-				</view>
-				<view class="case-list-item-foot">
-					<view class="case-item-btn">
-						<image src="../../static/icon/money.png" class="btn-img"></image>
-						<view class="btn-txt">￥30.00</view>
-					</view>
-					<view class="case-item-btn">
-						<image src="../../static/icon/phone.png" class="btn-img"></image>
-						<view class="btn-txt">18483680709</view>
+					<view class="case-list-item-foot">
+						<view class="case-item-btn">
+							<image src="../../static/icon/money.png" class="btn-img"></image>
+							<view class="btn-txt">￥{{item.rwxx.rwyj}}</view>
+						</view>
+						<view class="case-item-btn" @tap="makePhoneCall(item.arxx.arsj)">
+							<image src="../../static/icon/phone.png" class="btn-img"></image>
+							<view class="btn-txt">{{item.arxx && item.arxx.arsj}}</view>
+						</view>
 					</view>
 				</view>
 			</view>
-			<view class="case-list-item">
-				<view class="case-list-item-tag">
-					等待发放佣金中...
-				</view>
-				<image src="../../static/icon/yes1.png" class="tag-img"></image>
-				<view class="case-list-item-body">
-					<view class="case-item-info">
-						<view class="case-item-info-name">
-							张三
-							<view style="color: #999;margin-left: 18upx;">27岁</view>
-							<view style="color: #999;margin-left: 18upx;">男</view>
-						</view>
-						<view class="case-item-info-addr">
-							<view class="case-item-info-tt">外访时间</view>
-							<view class="case-item-info-td">
-								2018-03-14 14:00:00
-							</view>
-						</view>
-						<view class="case-item-info-addr">
-							<view class="case-item-info-tt">外访地址</view>
-							<view class="case-item-info-td">
-								四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区
-							</view>
-						</view>
-					</view>
-					<view class="case-item-way">
-						上门送信函（需签字）
-					</view>
-				</view>
-				<view class="case-list-item-foot">
-					<view class="case-item-btn">
-						<image src="../../static/icon/money.png" class="btn-img"></image>
-						<view class="btn-txt">￥30.00</view>
-					</view>
-					<view class="case-item-btn">
-						<image src="../../static/icon/phone.png" class="btn-img"></image>
-						<view class="btn-txt">18483680709</view>
-					</view>
-				</view>
-			</view>
-			<view class="case-list-item">
-				<view class="case-list-item-tag" style="background: linear-gradient(to left, #FE6756, #F00000)">
-					审核不通过
-				</view>
-				<image src="../../static/icon/no2.png" class="tag-img"></image>
-				<view class="case-list-item-body">
-					<view class="case-item-info">
-						<view class="case-item-info-name">
-							张三
-							<view style="color: #999;margin-left: 18upx;">27岁</view>
-							<view style="color: #999;margin-left: 18upx;">男</view>
-						</view>
-						<view class="case-item-info-addr">
-							<view class="case-item-info-tt">外访时间</view>
-							<view class="case-item-info-td">
-								2018-03-14 14:00:00
-							</view>
-						</view>
-						<view class="case-item-info-addr">
-							<view class="case-item-info-tt">外访地址</view>
-							<view class="case-item-info-td">
-								四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区
-							</view>
-						</view>
-					</view>
-					<view class="case-item-way">
-						传达催款信息（记录音视频影像）
-					</view>
-				</view>
-				<view class="case-list-item-foot">
-					<view class="case-item-btn">
-						<image src="../../static/icon/money.png" class="btn-img"></image>
-						<view class="btn-txt">￥30.00</view>
-					</view>
-					<view class="case-item-btn">
-						<image src="../../static/icon/phone.png" class="btn-img"></image>
-						<view class="btn-txt">18483680709</view>
-					</view>
-				</view>
-			</view>
-			<view class="case-list-item">
-				<view class="case-list-item-tag">
-					已赚取￥20.00
-				</view>
-				<view class="case-list-item-body">
-					<view class="case-item-info">
-						<view class="case-item-info-name">
-							张三
-							<view style="color: #999;margin-left: 18upx;">27岁</view>
-							<view style="color: #999;margin-left: 18upx;">男</view>
-						</view>
-						<view class="case-item-info-addr">
-							<view class="case-item-info-tt">外访时间</view>
-							<view class="case-item-info-td">
-								2018-03-14 14:00:00
-							</view>
-						</view>
-						<view class="case-item-info-addr">
-							<view class="case-item-info-tt">外访地址</view>
-							<view class="case-item-info-td">
-								四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区
-							</view>
-						</view>
-					</view>
-					<view class="case-item-way">
-						确认对象地址信息准确性（上传定位信息）
-					</view>
-				</view>
-				<view class="case-list-item-foot">
-					<view class="case-item-btn">
-						<image src="../../static/icon/money.png" class="btn-img"></image>
-						<view class="btn-txt">￥30.00</view>
-					</view>
-					<view class="case-item-btn">
-						<image src="../../static/icon/phone.png" class="btn-img"></image>
-						<view class="btn-txt">18483680709</view>
-					</view>
-				</view>
-			</view> -->
 		</view>
-		<view class="page-end">
-			<view class="end-txt">-- END --</view>
+		<view class="page-end" v-show="isEnd">
+			<view class="end-txt">{{currentPage}}/{{totalPage}}</view>
 		</view>
 	</view>
 </template>
 
 <script>
 	export default {
-		computed: {
-			cases() {
-				return this.data.filter(item => {
-					return item.zt == this.activeIndex;
-				})
-			}
+		computed: {},
+		onLoad() {
+			this.user = this.getGlobalUser() != null ? this.getGlobalUser() : {};
+			this.activeIndex = this.tabList[0].type;
+
+			this.$api.post('/dict/findDictListByZddm', {
+				zddm: 'D_SYS_RWFSDM',
+				zxbz: 0
+			}).then((res) => {
+				if (res.resCode == 200) {
+					this.rwfsArr = res.data;
+					this.getTaskData(this.currentPage, this.pageSize);
+				}
+			}).catch((err) => {
+				console.log('request fail', err);
+			})
+		},
+		onShow() {
+			console.log(this.activeIndex)
+			// this.isEnd = false;
+			this.currentPage = 1;
+			this.getTaskData(this.currentPage, this.pageSize);
+			// 			
 		},
 		data() {
 			return {
-				tabList: ['外访中', '已外访', '未通过', '已通过', '已发放'],
-				toolbarShow: false,
+				tabList: [{
+						type: 3,
+						label: '外访中'
+					},
+					{
+						type: 4,
+						label: '已外访'
+					},
+					{
+						type: 5,
+						label: '未通过'
+					},
+					{
+						type: 6,
+						label: '已通过'
+					},
+					{
+						type: 7,
+						label: '已发放'
+					},
+				],
+				toolbarShow: true,
 				activeIndex: 0,
+				isEnd: false,
 				tabs: 5,
-				data: [
-					{
-						"name": '张三',
-						"age": '27岁',
-						"sex": '男',
-						"time": "2018-03-14 14:00:00",
-						"addr": '四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区',
-						"way": '确认对象地址信息准确性（上传定位信息)',
-						'phone': '18483680709',
-						'price': '40.00',
-						"zt": '0'
-					},
-					{
-						"name": '张三',
-						"age": '27岁',
-						"sex": '男',
-						"time": "2018-03-14 14:00:00",
-						"addr": '四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区',
-						"way": '确认对象地址信息准确性（上传定位信息)',
-						'phone': '18483680709',
-						'price': '40.00',
-						"zt": '1'
-					},
-					{
-						"name": '张三',
-						"age": '27岁',
-						"sex": '男',
-						"time": "2018-03-14 14:00:00",
-						"addr": '四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区',
-						"way": '确认对象地址信息准确性（上传定位信息)',
-						'phone': '18483680709',
-						'price': '40.00',
-						"zt": '2'
-					},
-					{
-						"name": '张三',
-						"age": '27岁',
-						"sex": '男',
-						"time": "2018-03-14 14:00:00",
-						"addr": '四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区',
-						"way": '确认对象地址信息准确性（上传定位信息)',
-						'phone': '18483680709',
-						'price': '40.00',
-						"zt": '3'
-					},
-					{
-						"name": '张三',
-						"age": '27岁',
-						"sex": '男',
-						"time": "2018-03-14 14:00:00",
-						"addr": '四川省成都市武侯区四川省成都市武侯区四川省成都市武侯区',
-						"way": '确认对象地址信息准确性（上传定位信息)',
-						"money": '30.00',
-						'phone': '18483680709',
-						'price': '40.00',
-						"zt": '4'
-					}
-				]
+				cases: [],
+				rwfsArr: [],
+				user: {},
+				currentPage: 1,
+				pageSize: 4,
+				totalPage: 0,
+				startX: 0,
+				moveX: 0,
+				disX: 0,
+				startY: 0,
+				moveY: 0,
+				disY: 0,
 			};
 		},
+		// 		onPullDownRefresh() {
+		// 			console.log('上一页');
+		// 			if (this.currentPage > 1) { // 查询上一页面
+		// 				this.currentPage--;
+		// 			} else {
+		// 				return
+		// 			}
+		// 			this.refresh();
+		// 		},
+		// 		onReachBottom() { //加载下一页
+		// 			console.log('下一页'); // 查询下一页面，当前页数累加1
+		// 			if (this.currentPage < this.totalPage) {
+		// 				this.currentPage++;
+		// 				this.getTaskData(this.currentPage, this.pageSize);
+		// 			}
+		// 		},
 		methods: {
+			touchStart: function(ev) {
+				ev = ev || event;
+				ev.preventDefault();
+				if (ev.touches.length == 1) { //tounches类数组，等于1时表示此时有只有一只手指在触摸屏幕
+					this.startX = ev.touches[0].clientX; // 记录开始位置
+					this.startY = ev.touches[0].clientY;
+				}
+			},
+			touchMove: function(ev) {
+				ev = ev || event;
+				ev.preventDefault();
+
+				if (ev.touches.length == 1) {
+					//滑动时距离浏览器左侧的距离
+					this.moveX = ev.touches[0].clientX;
+					this.moveY = ev.touches[0].clientY;
+				}
+			},
+			touchEnd: function(ev) {
+				ev = ev || event;
+				ev.preventDefault();
+
+				this.disX = this.moveX - this.startX;
+				this.disY = this.moveY - this.startY;
+				if (this.disX < -110) { //向左
+					console.log(this.disX)
+					if (this.activeIndex < 7) {
+						this.activeIndex = this.activeIndex + 1;
+						this.activeTabChange(this.activeIndex);
+					}
+				} else if (this.disX > 110) { //向右
+					console.log(this.disX)
+					if (this.activeIndex > 3) {
+						this.activeIndex = this.activeIndex - 1;
+						this.activeTabChange(this.activeIndex);
+					}
+				}
+				if (this.startY < 120 && this.disY > 100) { //向下滑
+					if (this.currentPage > 1) { // 查询上一页面
+						this.currentPage--;
+						this.refresh();
+					}
+				} else if (this.startY > 500 && this.disY < -100) { //向上滑
+					if (this.currentPage < this.totalPage) {
+						this.currentPage++;
+						this.getTaskData(this.currentPage, this.pageSize);
+					}
+				}
+			},
+
+			refresh() {
+				uni.showNavigationBarLoading();
+				this.$api.post('/task/findAllByYwyidYjd', {
+					page: this.currentPage,
+					pagesize: this.pageSize,
+					ywyid: this.user.id,
+					rwzt: this.activeIndex
+				}).then((res) => {
+					this.cases = res.data;
+					this.totalPage = res.totalpage;
+					if (this.totalPage > 0) {
+						this.isEnd = true;
+					}
+					this.cases.forEach(item => {
+						item.rwxx.rwfs1 = this.$util.parseJSON(item.rwxx.rwfs, this.rwfsArr);
+					})
+					uni.hideNavigationBarLoading();
+					uni.stopPullDownRefresh();
+					console.log('refresh done')
+				}).catch((err) => {
+					console.log('request fail', err);
+				})
+			},
+			getTaskData(page, pagesize) {
+				this.$api.post('/task/findAllByYwyidYjd', {
+					page: page,
+					pagesize: pagesize,
+					ywyid: this.user.id,
+					rwzt: this.activeIndex
+				}).then((res) => {
+					this.cases = res.data;
+					this.totalPage = res.totalpage;
+					if (this.totalPage > 0) {
+						this.isEnd = true;
+					}
+					this.cases.forEach(item => {
+						item.rwxx.rwfs1 = this.$util.parseJSON(item.rwxx.rwfs, this.rwfsArr);
+					})
+				}).catch((err) => {
+					console.log('request fail', err);
+				})
+			},
 			toolBarShowChange() {
 				this.toolbarShow = !this.toolbarShow;
 			},
 			activeTabChange(index) {
+				this.isEnd = false;
 				this.activeIndex = index;
+				this.currentPage = 1;
+				this.getTaskData(this.currentPage, this.pageSize);
 			},
 			makePhoneCall(phone) {
 				uni.makePhoneCall({
 					phoneNumber: phone //仅为示例
 				});
 			},
-			takDetail(zt) {
+			takDetail(caseId, taskId) {
+				// 				let rwzt = '';
+				// 				this.tabList.forEach(item => {
+				// 					if(item.type == this.activeIndex) {
+				// 						rwzt = item.label;
+				// 					}
+				// 				});
 				uni.navigateTo({
-					url: '../../pages/task/task?id=0&zt=' + zt
+					url: '../../pages/task/task?caseId=' + caseId + '&taskId=' + taskId + '&rwzt=' + this.activeIndex
 				})
 			}
 		}

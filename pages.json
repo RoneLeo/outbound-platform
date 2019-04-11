@@ -123,6 +123,27 @@
                     "titleNView" : false
                 }
             }
+        },
+        {
+            "path" : "pages/cover/cover",
+            "style" : {
+                "navigationBarTextStyle" : "white",
+                "navigationBarTitleText" : "预览",
+                "navigationBarBackgroundColor" : "#000000",
+                "backgroundColor" : "#000000",
+                "app-plus" : {
+                    "titleNView" : false
+                }
+            }
+        },
+        {
+            "path" : "pages/modify/modify",
+            "style" : {
+                "navigationBarTextStyle" : "black",
+                "navigationBarTitleText" : "修改页面",
+                "navigationBarBackgroundColor" : "#FFFFFF",
+                "backgroundColor" : "#FFFFFF"
+            }
         }
     ],
     "permission" : {

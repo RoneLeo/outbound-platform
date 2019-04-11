@@ -4,30 +4,54 @@
 			<view class="list-item" @tap="modifyTxt">
 				<view class="list-tt">姓名</view>
 				<view class="list-td">
-					刘柳
+					{{user.mz}}
 					<image src="../../static/icon/right.png" class="list-right"></image>
 				</view>
 			</view>
-			<view class="list-item">
+			<view class="list-item" @tap="modifyTxt">
 				<view class="list-tt">性别</view>
 				<view class="list-td">
-					女
+					{{user.xb}}
 					<image src="../../static/icon/right.png" class="list-right"></image>
 				</view>
 			</view>
-			<view class="list-item">
+			<view class="list-item" @tap="modifyTxt">
 				<view class="list-tt">年龄</view>
 				<view class="list-td">
-					27岁
+					{{user.nl}}
 					<image src="../../static/icon/right.png" class="list-right"></image>
 				</view>
 			</view>
-			<view class="list-item">
-				<view class="list-tt">账号</view>
+			<view class="list-item" @tap="modifyTxt">
+				<view class="list-tt">电话</view>
 				<view class="list-td">
-					admin
+					{{user.lxdh}}
 					<image src="../../static/icon/right.png" class="list-right"></image>
 				</view>
+			</view>
+			<view class="list-item" @tap="modifyTxt">
+				<view class="list-tt">邮箱</view>
+				<view class="list-td">
+					{{user.yx}}
+					<image src="../../static/icon/right.png" class="list-right"></image>
+				</view>
+			</view>
+			<view class="list-item" @tap="modifyTxt">
+				<view class="list-tt">地址</view>
+				<view class="list-td">
+					{{user.dz}}
+					<image src="../../static/icon/right.png" class="list-right"></image>
+				</view>
+			</view>
+		</view>
+
+		<view class="list" style="margin-top: 30upx;">
+			<view class="list-item" @tap="clearFileList">
+				<view class="list-tt">清除缓存</view>
+				<!-- <view class="list-td">
+					{{user.mz}}
+					<image src="../../static/icon/right.png" class="list-right"></image>
+				</view> -->
 			</view>
 		</view>
 
@@ -40,10 +64,10 @@
 				</view>
 			</view>
 		</view> -->
-		
-		<view class="logout">
+
+		<!-- <view class="logout">
 			<button type="primary" class="logout-btn">退出当前账号</button>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -51,22 +75,50 @@
 	export default {
 		data() {
 			return {
-
+				user: {}
 			};
 		},
+		onLoad() {
+			this.user = this.getGlobalUser();
+		},
 		methods: {
+			clearFileList() {
+				uni.showLoading({
+					title:'清除中...',
+					mask: true
+				})
+				uni.clearStorage();
+				uni.getSavedFileList({
+					success: function(res) {
+						let files = res.fileList;
+						if (files.length > 0) {
+							for(let i = 0; i < files.length; i ++) {
+								uni.removeSavedFile({
+									filePath: files[i].filePath,
+									complete: function(res) {
+										if(i == files.length - 1) {
+											uni.hideLoading()
+										}
+										console.log(res);
+									}
+								});
+							}
+						}
+					}
+				});
+			},
 			modifyTxt() {
 				uni.navigateTo({
-					url: "../../pages/modifyTxt/modifyTxt"
+					url: "../../pages/modify/modify"
 				})
 			},
 			modifyRadio() {
 				uni.showActionSheet({
 					itemList: ['是', '否'],
 					success: (res) => {
-						if(res.tapIndex === 0) {
+						if (res.tapIndex === 0) {
 							this.$setting.swiper = true;
-						}else {
+						} else {
 							this.$setting.swiper = false;
 						}
 						console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
@@ -126,7 +178,9 @@
 			border: 0;
 			border-radius: 45upx;
 			font-size: 16px;
-			background: linear-gradient(to right, #66CC66, #00B07B);
+			background: linear-gradient(60deg, #ffaa33, #ffd655);
+			// background: linear-gradient(to right, #66CC66, #00B07B);
+			box-shadow: 1px 1px 10px #ffffff;
 			width: 600upx;
 		}
 	}

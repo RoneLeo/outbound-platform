@@ -7,10 +7,10 @@
 				我要
 			</view>
 			<view style="font-size: 12px;font-weight: 300;color: #FFFFFF;"> 
-				认领
+				接单
 			</view>
 		</view>
-		<BasicCase tagTxt="¥40000.00"></BasicCase>
+		<BasicCase :tagTxt="'¥'+ rwyj" :caseId="caseId" :taskId="taskId"></BasicCase>
 		<view class="page-end">
 			<view class="end-txt">-- END --</view>
 		</view>
@@ -27,23 +27,32 @@
 		},
 		data() {
 			return {
-				// toolbarShow: false
+				caseId: 0,
+				taskId: 0,
+				rwyj: 0,
 			};
 		},
 		onLoad(params) {
-			console.log(params, params.caseId)
-			let id = uni.getStorageSync("globalUser").id;
-			this.$api.test('/user/changePassword', {id: id, mm: '666666'}).then((res)=>{
-				console.log('请求结果 : ' + JSON.stringify(res))
-			}).catch((err)=>{
-				this.loading = false;
-				console.log('request fail', err);
-			})
+			this.caseId = params.caseId;
+			this.taskId = params.taskId;
+			this.rwyj = params.rwyj;
 		},
 		methods:{
 			toolBarShowChange() {
-				console.log(11111);
-				this.HMmessages.show('认领成功！', {icon: 'success', closeButton: true, duration: 3000})
+				let userId = this.getGlobalUser() != null ? this.getGlobalUser().id : '';
+				this.$api.post('/task/order', {ywyid: userId, rwid: this.taskId}).then((res)=>{
+					if(res.resCode == 200) {
+						this.HMmessages.show('接单成功！', {icon: 'success', closeButton: true, duration: 3000})
+					}else {
+						uni.showToast({
+							title: res.resMsg,
+							icon: 'none'
+						})
+					}
+				}).catch((err)=>{
+					console.log('request fail', err);
+				})
+				
 			}
 		}
 	}

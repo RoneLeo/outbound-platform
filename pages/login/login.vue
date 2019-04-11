@@ -8,7 +8,7 @@
 
 			<view class="info-wapper">
 				<label class="words-lbl">授权码</label>
-				<input name="sqm" type="text" v-model="sqm" value="" @confirm="formSubmit" password class="input" placeholder="请输入授权码"
+				<input name="sqm" type="number" v-model="sqm" value="" @confirm="formSubmit" class="input" placeholder="请输入授权码"
 				 placeholder-class="graywords" />
 			</view>
 			<button open-type="getUserInfo" class="submit-btn" type="primary" form-type="submit" style="">提交</button>
@@ -28,17 +28,67 @@
 				sqm: ''
 			};
 		},
-		onLoad(params) {
-			console.log(params.auto)
+		onLoad() {
+			uni.showToast({
+				title: '自动登录中',
+				icon: 'none'
+			})
+			uni.login({
+				provider: "weixin",
+				success: (loginResult) => {
+					var code = loginResult.code,
+						encryptedData = '',
+						iv = '';
+					uni.getUserInfo({
+						provider: 'weixin',
+						success: (infoRes) => {
+							encryptedData = infoRes.encryptedData;
+							iv = infoRes.iv;
+							this.$api.post('/user/weLogin', {
+								code: code,
+								sqm: '',
+								encryptedData: encryptedData,
+								iv: iv
+							}).then(res => {
+								if (res.resCode === 200) {
+									uni.showToast({
+										title: '登录成功',
+										icon: 'none'
+									})
+									uni.setStorageSync("globalUser", res.data.userInfo);
+									uni.setStorageSync("sessionId", res.data.sessionId);
+									let pages = getCurrentPages();
+									if (pages.length > 1) {
+										uni.navigateBack()
+									}else {
+										uni.switchTab({
+											url: "../../pages/index/index"
+										});
+									}
+								}else {
+									uni.showToast({
+										title: '登录失败，手动登录',
+										icon: 'none'
+									})
+								}
+							})
+						},
+						fail: (res) => {
+							console.log('uni getUserInfo', res);
+						}
+					});
+				},
+				fail: (res) => {
+					console.log('uni login', res);
+				},
+			})
 		},
 		methods: {
 			formSubmit(e) {
 				var sqm = e.detail.value.sqm;
-				console.log('授权码', sqm);
 				//#ifdef MP-WEIXIN
 				wx.getSetting({
 					success: res => {
-						console.log('getSetting', res, res.authSetting, res.authSetting['scope.userInfo'])
 						if (!res.authSetting['scope.userInfo']) {
 							wx.authorize({
 								scope: 'scope.userInfo',
@@ -54,20 +104,19 @@
 												success: (infoRes) => {
 													encryptedData = infoRes.encryptedData;
 													iv = infoRes.iv;
-													console.log('login.vue code', code, sqm, encryptedData, iv);
 													this.requestLogin(code, sqm, encryptedData, iv)
 												},
-												complete: (res) => {
+												fail: (res) => {
 													console.log('login.vue uni getUserInfo', res);
 												}
 											});
 										},
-										complete: (res) => {
+										fail: (res) => {
 											console.log('login.vue uni login', res);
 										}
 									});
 								},
-								complete: (res) => {
+								fail: (res) => {
 									console.log('login.vue wx authorize', res);
 								}
 							})
@@ -83,15 +132,14 @@
 										success: (infoRes) => {
 											encryptedData = infoRes.encryptedData;
 											iv = infoRes.iv;
-											console.log('code', code, sqm, encryptedData, iv);
 											this.requestLogin(code, sqm, encryptedData, iv)
 										},
-										complete: (res) => {
+										fail: (res) => {
 											console.log('uni getUserInfo', res);
 										}
 									});
 								},
-								complete: (res) => {
+								fail: (res) => {
 									console.log('uni login', res);
 								}
 							});
@@ -101,18 +149,19 @@
 				//#endif
 			},
 			requestLogin(code, sqm, encryptedData, iv) {
-				this.$api.test('/user/weLogin', {
+				console.log('参数',code)
+				console.log('sqm', sqm);
+				console.log('encryptedData', encryptedData);
+				console.log('iv', iv)
+				this.$api.post('/user/weLogin', {
 					code: code,
 					sqm: sqm || this.sqm,
 					encryptedData: encryptedData,
 					iv: iv
 				}).then(res => {
-					console.log('login.vue 的登录接口返回：', res);
 					if (res.resCode === 200) {
 						uni.setStorageSync("globalUser", res.data.userInfo);
 						uni.setStorageSync("sessionId", res.data.sessionId);
-						const storage = uni.getStorageInfoSync();
-						console.log('storage', storage.keys);
 						uni.switchTab({
 							url: "../../pages/index/index"
 						});

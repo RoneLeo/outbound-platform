@@ -16,7 +16,7 @@ const autoLogin = () => {
 				success: (infoRes) => {
 					let encryptedData = infoRes.encryptedData;
 					let iv = infoRes.iv;
-					test('/user/weLogin', {
+					post('/user/weLogin', {
 						code: code,
 						sqm: '',
 						encryptedData: encryptedData,
@@ -45,19 +45,42 @@ const autoLogin = () => {
 	})
 }
 
+const getGlobalUser = function(key) {
+	var userInfo = uni.getStorageSync("globalUser");
+	if (userInfo != null && userInfo != "" && userInfo != undefined) {
+		return userInfo;
+	} else {
+		return null;
+	}
+}
+
+const getSessionId = function(key) {
+	var sessionId = uni.getStorageSync("sessionId");
+	if (sessionId != null && sessionId != "" && sessionId != undefined) {
+		return sessionId;
+	} else {
+		return null;
+	}
+}
+
 
 // 单独导出(测试接口) import {test} from '@/common/vmeitime-http/'
-export const test = (url, data) => {
+export const post = (url, data) => {
 	http.config.baseUrl = "http://www.chiy.online:8083"
 	//设置请求前拦截器
 	http.interceptor.request = (config) => {
-		config.header = {
-			'content-type': 'application/x-www-form-urlencoded',
-			'cookie': 'JSESSIONID=' + uni.getStorageSync("sessionId")
-		}
 		if (url.indexOf("Login") != -1) { //如果是登录接口
 			config.header = {
 				'content-type': 'application/x-www-form-urlencoded'
+			}
+		} else {
+			if (getGlobalUser() == null || getSessionId() == null) { //如果缓存没有的话,就要登录
+				autoLogin();
+				return;
+			}
+			config.header = {
+				'content-type': 'application/x-www-form-urlencoded',
+				'cookie': 'JSESSIONID=' + uni.getStorageSync("sessionId")
 			}
 		}
 	}
@@ -87,8 +110,33 @@ export const test = (url, data) => {
 	return http.request({
 		url: url,
 		dataType: 'text',
+		method: 'POST',
 		data,
 	})
+}
+
+export const uploadFile = (obj) => {
+	const {
+		url,
+		data,
+		files,
+		success
+	} = obj
+	
+	let baseUrl = "http://www.chiy.online:8083";
+	let header = {
+		'content-type': 'application/x-www-form-urlencoded',
+		'cookie': 'JSESSIONID=' + uni.getStorageSync("sessionId")
+	}
+	
+	uni.uploadFile({
+		url: baseUrl + url, //仅为示例，非真实的接口地址
+		header: header,
+		files: files,
+		name: 'file',
+		formData: data,
+		success: success
+	});
 }
 
 // 轮播图
@@ -103,6 +151,7 @@ export const banner = (data) => {
 
 // 默认全部导出  import api from '@/common/vmeitime-http/'
 export default {
-	test,
-	banner
+	post,
+	banner,
+	uploadFile
 }

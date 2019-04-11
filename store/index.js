@@ -28,7 +28,7 @@ const store = new Vuex.Store({
 	mutations: {
 		resetFormData(state){
 			state.formData = {
-				ba: '',
+				bz: '',
 				wz: '四川省成都市',
 				pic: '',
 				audios: [],
