@@ -32,7 +32,7 @@
 		</view>
 
 
-		<BasicCase :tagTxt="tabList[rwzt]" :caseId="caseId" :taskId="taskId"></BasicCase>
+		<BasicCase from="myTask" :caseId="caseId" :taskId="taskId"></BasicCase>
 
 		<view v-if="rwzt<4" class="page-block task-info record-block">
 			<view class="block-name">
@@ -88,7 +88,7 @@
 					<view class="record-item-td media-wrapper">
 						<view class="video-media" v-for="(video, videoIndex) in videoSrcList" :key="videoIndex">
 							<video :src="video" controls></video>
-							<image src="../../static/icon/delete.png" class="video-delete" @tap="deleteVideo(videoIndex)" data-imgIndex="videoIndex"></image>
+							<cover-image src="../../static/icon/delete.png" class="video-delete" @tap="deleteVideo(videoIndex)" data-imgIndex="videoIndex"></cover-image>
 						</view>
 					</view>
 				</view>
@@ -98,6 +98,7 @@
 		<view v-if="rwzt>3" class="page-block task-info record-block">
 			<view class="block-name">
 				历史催单记录
+				<view class="save-btn" @tap="clearState" style="margin-right: 10upx;">清 空</view>
 			</view>
 			<view class="record-list">
 				<view class="record-item">
@@ -119,14 +120,23 @@
 				<view class="record-item">
 					<view class="record-item-tt over-text">录 音</view>
 					<view class="record-item-td media-wrapper">
-						<block v-if="feedbackTxt.fkfj">
-							<view class="audio-media" v-for="(audio, audioIndex) in feedbackTxt.fkfj.audio" :key="audioIndex">
+						<block v-if="feedbackAudios.length">
+							<!-- <view class="audio-box" v-for="(audio, audioIndex) in feedbackAudios" :key="audioIndex">
+								<audio :id="'myAudio' + audioIndex" :name="feedbackTxt.fksj" 
+									@bindplay="playAudio(audioIndex)"
+									@bindpause="pauseAudio(audioIndex)"
+									@binderror="errorAudio(audioIndex)"
+									@bindended="endAudio(audioIndex)"
+									:author="user.mz" :src="'http://www.chiy.online:8083/' +audio.src"  controls loop>
+								</audio>
+							</view> -->
+							<view class="audio-media" v-for="(audio, audioIndex) in feedbackAudios" :key="audioIndex">
 								<image v-show="!audio.isPlaying" src="../../static/icon/play.png" class="audio-icon" @tap="playFeedbackAudio(audioIndex)"></image>
 								<image v-show="audio.isPlaying" src="../../static/icon/pause.png" class="audio-icon" @tap="playFeedbackAudio(audioIndex)"></image>
-								<!-- <view class="audio-progress">
+								<view class="audio-progress">
 									<progress :percent="audio.percent" stroke-width="3" activeColor="#ffffff" backgroundColor="#aaaaaa" />
-								</view> -->
-								<!-- <view class="audio-length">{{audio.audio.time}}</view> -->
+								</view>
+								<view class="audio-length">{{audio.time}}</view>
 								<!-- <image src="../../static/icon/delete.png" class="audio-delete" @tap="deleteAudio(audioIndex)"></image> -->
 							</view>
 						</block>
@@ -209,9 +219,9 @@
 				rwzt: 0,
 				recorderManager: {},
 				innerAudioContext: {},
-				innerAudioContexts: [],
+				// innerAudioContexts: [],
 				feedbackIAC: {},
-				feedbackIACS: [],
+				feedbackCts: [],
 				audioFileSrcs: [],
 				amapPlugin: null,  
 				amapKey: '4e8af665cf89ce76c04389a0719c67a5',
@@ -220,15 +230,20 @@
 				toolbarShow: false,
 				
 				tabList: ['', '', '', '外访中', '已外访', '未通过', '已通过', '已发放'],
-				feedbackTxt: {}
+				feedbackTxt: {},
+				feedbackAudios: []
 			};
+		},
+		onUnload() {
+			this.recorderManager = {};
+			this.innerAudioContext = {};
+			this.feedbackIAC = {};
 		},
 		onLoad(params) {
 			this.caseId = params.caseId;
 			this.taskId = params.taskId;
 			this.rwzt = params.rwzt;
 			this.user = this.getGlobalUser() != null ? this.getGlobalUser() : {};
-			
 			
 			//#ifdef MP-WEIXIN
 			uni.authorize({
@@ -249,7 +264,24 @@
 			if(Number(this.rwzt) > 3) {
 				this.$api.post('/feedback/findAllByRwid', {rwid: this.taskId}).then(res => {
 					this.feedbackTxt = res.data;
-					
+					if(res.data.fkfj && res.data.fkfj.audio.length) {
+						let audios = res.data.fkfj.audio;
+						this.feedbackAudios = audios.map(item => {
+							let strs = item.split('.');
+							let str = strs[strs.length - 2];
+							let len = str.split('=').length;
+							let time = str.split('=')[len-1];
+							console.log('time',str, time);
+							return {src: item, isPlaying: false, percent: 0, time: time ? this.$util.formateMSecond(Math.round(time * 10) / 10):''}
+						})
+						//#ifdef MP-WEIXIN
+// 						this.feedbackCts = this.feedbackAudios.map((item, index) => {
+// 							return wx.createAudioContext('myAudio' + index)
+// 						})
+// 						console.log(this.feedbackCts);
+						//#endif
+					}
+					// this.feedbackAudios = res.data.fkfj && res.data.fkfj.audio;
 				})
 			}
 			
@@ -279,7 +311,7 @@
 											src: res.savedFilePath,
 											date: this.$util.formatTime(new Date()),
 											duration: duration > 0 ? duration : 0,
-											time: this.$util.formateMSecond(Math.round(duration * 10) / 10)
+											time: '00:00'
 										},
 										percent: 0,
 										isPlaying: false
@@ -303,8 +335,78 @@
 		},
 		methods:{
 			...mapMutations(['saveFormData', 'resetFormData']),
+// 			playAudio(index) {
+// 				this.feedbackCts[index].play();
+// 			},
+// 			pauseAudio(index) {
+// 				this.feedbackCts[index].pause();
+// 			},
+// 			errorAudio(index) {
+// 				uni.showToast({
+// 					title: '音频播放出错'
+// 				})
+// 			},
+// 			endAudio(index) {
+// 				console.log('音频播放结束', index)
+// 			},
 			playFeedbackAudio(index) {
+				console.log(this.feedbackAudios[index])
+				// let audios = this.feedbackTxt.fkfj.audio;
+				if(this.feedbackAudios[index].isPlaying) {
+					this.feedbackIAC.stop()
+					this.feedbackIAC.onStop( () => {
+						console.log('stop')
+						this.feedbackAudios[index].isPlaying = false;
+					})
+				}else {
+					uni.downloadFile({
+						url: this.$url + '/' + this.feedbackAudios[index].src, //仅为示例，并非真实的资源
+						success: (res) => {
+							if (res.statusCode === 200) {
+								console.log('下载成功');
+								this.feedbackIAC.src = res.tempFilePath;
+								this.feedbackIAC.play();
+								console.log(index, this.feedbackAudios[index],  this.feedbackIAC)
+								this.feedbackIAC.onPlay(() => {
+									console.log('开始播放', this.feedbackIAC.duration)
+									for(let i = 0; i < this.feedbackAudios.length; i ++) {
+										this.feedbackAudios[i].isPlaying = (i!= index) ? false : true;
+									}
+								});
+			
+								this.feedbackIAC.onTimeUpdate(() => {
+									console.log('进度更新', this.feedbackIAC.currentTime, this.feedbackIAC.duration)
+									this.feedbackAudios[index].time = this.$util.formateSecondDigital(Math.round(this.feedbackIAC.currentTime))
+									const time = this.feedbackIAC.currentTime, duration = this.feedbackIAC.duration;
 				
+									this.feedbackAudios[index].percent = (time/duration)*100
+								})
+							}else {
+								uni.showToast({
+									title:'音频文件下载出错',
+									icon: 'none'
+								})
+							}
+					
+							this.feedbackIAC.onEnded(() => {
+								console.log('播放结束')
+								this.feedbackAudios[index].isPlaying = false;
+								this.feedbackAudios[index].percent = 100;
+							});
+							this.feedbackIAC.onError((res) => {
+								this.feedbackAudios[index].isPlaying = false;
+								console.log('播放出错', res);
+							});
+						},
+						fail(res) {
+							uni.showToast({
+								title:'音频文件下载出错',
+								icon: 'none'
+							})
+						}
+					});
+					
+				}
 			},
 			playAudio(index) {
 				if(this.audioSrcList[index].isPlaying) {
@@ -320,6 +422,7 @@
 					
 					this.innerAudioContext.onPlay(() => {
 						console.log('开始播放')
+						this.audioSrcList[index].percent = 0;
 						for(let i = 0; i < this.audioSrcList.length; i ++) {
 							this.audioSrcList[i].isPlaying = (i!= index) ? false : true;
 						}
@@ -364,6 +467,12 @@
 				let imgs = this.$store.state.formData.imgs;
 				let videos = this.$store.state.formData.videos;
 				let audios = this.$store.state.formData.audios.map(item => {
+// 					if(item.audio.src.indexOf('durationTime') == -1) {  //必须要把音频时长存在src里面， 拿出来的时候才能知道时长
+// 						let timeStr = 'durationTime='+item.audio.duration;
+// 						let arr = item.audio.src.split('.');
+// 						arr.splice(arr.length - 1, 0, timeStr);
+// 						item.audio.src = arr.join('.')
+// 					}
 					return item.audio.src
 				});
 				const files = [].concat(imgs).concat(videos).concat(audios);
@@ -374,7 +483,6 @@
 					mask: true
 				})
 				for(let i = 0; i < files.length; i ++) {
-					let len = files[i].split('.').length;
 						let uploadTask = uni.uploadFile({
 							url: baseUrl + '/file/add', //仅为示例，非真实的接口地址
 							header: header,
@@ -398,6 +506,9 @@
 										})
 									}, 500);
 								}
+							},
+							fail: () => {
+								uni.hideLoading();
 							}
 						});
 						uploadTask.onProgressUpdate((res) => {
@@ -409,6 +520,10 @@
 				
 			},
 			clearState() {
+				uni.showLoading({
+					title: '清空中...',
+					mask: true
+				})
 				this.resetFormData();
 				uni.getSavedFileList({
 					success: function(res) {
@@ -418,10 +533,19 @@
 								uni.removeSavedFile({
 									filePath: files[i].filePath,
 									complete: function(res) {
+										if(i == files.length - 1) {
+											uni.hideLoading()
+										}
+									},
+									fail() {
+										uni.hideLoading()
 									}
 								});
 							}
 						}
+					},
+					fail() {
+						uni.hideLoading()
 					}
 				});
 			},

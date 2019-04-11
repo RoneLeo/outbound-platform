@@ -56,6 +56,7 @@
 			};
 		},
 		onUnload() {
+			this.ctx = {};
 			clearInterval(interval);
 			clearInterval(interval5);
 		},
@@ -79,6 +80,11 @@
 				}
 			},
 			stopRecord() {
+				uni.showLoading({
+					mask: true
+				})
+				this.isRecording = false;
+				this.isbling = false;
 				this.ctx.stopRecord({
 					success: (res) => {
 						this.tempsrc = res.tempThumbPath;
@@ -88,13 +94,24 @@
 							success: (res) => {
 								console.log('视频的路径：', res.savedFilePath)
 								this.src = res.savedFilePath
-								this.isRecording = false;
-								this.isbling = false;
+								
 								let arr = new Array(this.src);
 								
 								let temp = this.videoSrcList;
 								temp = temp.concat(arr);
+								console.log('视频：', temp)
 								this.$store.commit('saveFormData', {videos: temp}, this.taskId);
+								uni.showToast({
+									title: '视频缓存成功',
+									icon: 'none'
+								})
+							},
+							fail() {
+								uni.hideLoading()
+								uni.showToast({
+									title: '视频缓存失败',
+									icon: 'none'
+								})
 							}
 						})
 					},
@@ -104,6 +121,12 @@
 							closeButton: true,
 							duration: 3000
 						})
+						
+						uni.showToast({
+							title: 'stopRecord Error',
+							icon: 'none'
+						})
+						uni.hideLoading()
 					}
 				})
 				clearInterval(interval);

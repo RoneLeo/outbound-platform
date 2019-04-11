@@ -115,43 +115,11 @@ export const post = (url, data) => {
 	})
 }
 
-export const uploadFile = (obj) => {
-	const {
-		url,
-		data,
-		files,
-		success
-	} = obj
-	
-	let baseUrl = "http://www.chiy.online:8083";
-	let header = {
-		'content-type': 'application/x-www-form-urlencoded',
-		'cookie': 'JSESSIONID=' + uni.getStorageSync("sessionId")
-	}
-	
-	uni.uploadFile({
-		url: baseUrl + url, //仅为示例，非真实的接口地址
-		header: header,
-		files: files,
-		name: 'file',
-		formData: data,
-		success: success
-	});
-}
 
-// 轮播图
-export const banner = (data) => {
-	return http.request({
-		url: '/banner/36kr',
-		method: 'GET',
-		data,
-		// handle:true
-	})
-}
+
+
 
 // 默认全部导出  import api from '@/common/vmeitime-http/'
 export default {
-	post,
-	banner,
-	uploadFile
+	post
 }

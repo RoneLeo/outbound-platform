@@ -83,13 +83,13 @@
 	
 }
 .case-name {
-	width: 170upx;
+	width: 160upx;
 }
 .case-date {
-	width: 200upx;
+	width: 180upx;
 }
 .case-status{
-	width: 140upx;
+	width: 130upx;
 	color: #00B07B
 }
 .case-title {
@@ -100,9 +100,9 @@
 }
 
 .appoint-case {
-	position: absolute;
+	/* position: absolute;
 	top: 10upx;
-	left: 10upx;
+	left: 10upx; */
 	width: 40upx;
 	height: 40upx;
 	align-self: center;

@@ -1,5 +1,11 @@
 <template>
 	<view class="page" @touchstart='touchStart' @touchmove='touchMove' @touchend='touchEnd'>
+		<view v-show="isNull" class="null-box" >
+			<view class="null-wrapper">
+				<image src="../../static/icon/null3.png" class="null-ico"></image>
+				<text class="null-txt">没有相关数据</text>
+			</view>
+		</view>
 		<view v-show="toolbarShow" class="tabBar-wrapper">
 			<view class="tabBar">
 				<view v-for="(item, index) in tabList" :key="index" @tap="activeTabChange(item.type)" :class="{'tabBar-item':true,'active':activeIndex==item.type}">
@@ -28,7 +34,7 @@
 					</view>
 					<image v-if="item.rwxx.rwzt === 6" src="../../static/icon/yes1.png" class="tag-img"></image>
 					<image v-if="item.rwxx.rwzt === 5" src="../../static/icon/no2.png" class="tag-img"></image>
-					<view class="case-list-item-body" @tap="takDetail(item.rwxx.ajid, item.rwxx.id)">
+					<view class="case-list-item-body" @tap="taskDetail(item.rwxx.ajid, item.rwxx.id)">
 						<view class="case-item-info">
 							<view class="case-item-info-name">
 								{{item.arxx && item.arxx.armc}}
@@ -86,10 +92,8 @@
 		},
 		onShow() {
 			console.log(this.activeIndex)
-			// this.isEnd = false;
 			this.currentPage = 1;
 			this.getTaskData(this.currentPage, this.pageSize);
-			// 			
 		},
 		data() {
 			return {
@@ -117,6 +121,7 @@
 				toolbarShow: true,
 				activeIndex: 0,
 				isEnd: false,
+				isNull: false,
 				tabs: 5,
 				cases: [],
 				rwfsArr: [],
@@ -132,97 +137,12 @@
 				disY: 0,
 			};
 		},
-		// 		onPullDownRefresh() {
-		// 			console.log('上一页');
-		// 			if (this.currentPage > 1) { // 查询上一页面
-		// 				this.currentPage--;
-		// 			} else {
-		// 				return
-		// 			}
-		// 			this.refresh();
-		// 		},
-		// 		onReachBottom() { //加载下一页
-		// 			console.log('下一页'); // 查询下一页面，当前页数累加1
-		// 			if (this.currentPage < this.totalPage) {
-		// 				this.currentPage++;
-		// 				this.getTaskData(this.currentPage, this.pageSize);
-		// 			}
-		// 		},
 		methods: {
-			touchStart: function(ev) {
-				ev = ev || event;
-				ev.preventDefault();
-				if (ev.touches.length == 1) { //tounches类数组，等于1时表示此时有只有一只手指在触摸屏幕
-					this.startX = ev.touches[0].clientX; // 记录开始位置
-					this.startY = ev.touches[0].clientY;
-				}
-			},
-			touchMove: function(ev) {
-				ev = ev || event;
-				ev.preventDefault();
-
-				if (ev.touches.length == 1) {
-					//滑动时距离浏览器左侧的距离
-					this.moveX = ev.touches[0].clientX;
-					this.moveY = ev.touches[0].clientY;
-				}
-			},
-			touchEnd: function(ev) {
-				ev = ev || event;
-				ev.preventDefault();
-
-				this.disX = this.moveX - this.startX;
-				this.disY = this.moveY - this.startY;
-				if (this.disX < -110) { //向左
-					console.log(this.disX)
-					if (this.activeIndex < 7) {
-						this.activeIndex = this.activeIndex + 1;
-						this.activeTabChange(this.activeIndex);
-					}
-				} else if (this.disX > 110) { //向右
-					console.log(this.disX)
-					if (this.activeIndex > 3) {
-						this.activeIndex = this.activeIndex - 1;
-						this.activeTabChange(this.activeIndex);
-					}
-				}
-				if (this.startY < 120 && this.disY > 100) { //向下滑
-					if (this.currentPage > 1) { // 查询上一页面
-						this.currentPage--;
-						this.refresh();
-					}
-				} else if (this.startY > 500 && this.disY < -100) { //向上滑
-					if (this.currentPage < this.totalPage) {
-						this.currentPage++;
-						this.getTaskData(this.currentPage, this.pageSize);
-					}
-				}
-			},
-
-			refresh() {
-				uni.showNavigationBarLoading();
-				this.$api.post('/task/findAllByYwyidYjd', {
-					page: this.currentPage,
-					pagesize: this.pageSize,
-					ywyid: this.user.id,
-					rwzt: this.activeIndex
-				}).then((res) => {
-					this.cases = res.data;
-					this.totalPage = res.totalpage;
-					if (this.totalPage > 0) {
-						this.isEnd = true;
-					}
-					this.cases.forEach(item => {
-						item.rwxx.rwfs1 = this.$util.parseJSON(item.rwxx.rwfs, this.rwfsArr);
-					})
-					uni.hideNavigationBarLoading();
-					uni.stopPullDownRefresh();
-					console.log('refresh done')
-				}).catch((err) => {
-					console.log('request fail', err);
-				})
-			},
 			getTaskData(page, pagesize) {
+				uni.showLoading({
+					mask: true
+				})
+				this.isNull = false;
 				this.$api.post('/task/findAllByYwyidYjd', {
 					page: page,
 					pagesize: pagesize,
@@ -233,11 +153,15 @@
 					this.totalPage = res.totalpage;
 					if (this.totalPage > 0) {
 						this.isEnd = true;
+					}else if(this.totalPage == 0) {
+						this.isNull = true;
 					}
 					this.cases.forEach(item => {
 						item.rwxx.rwfs1 = this.$util.parseJSON(item.rwxx.rwfs, this.rwfsArr);
 					})
+					uni.hideLoading()
 				}).catch((err) => {
+					uni.hideLoading()
 					console.log('request fail', err);
 				})
 			},
@@ -255,17 +179,58 @@
 					phoneNumber: phone //仅为示例
 				});
 			},
-			takDetail(caseId, taskId) {
-				// 				let rwzt = '';
-				// 				this.tabList.forEach(item => {
-				// 					if(item.type == this.activeIndex) {
-				// 						rwzt = item.label;
-				// 					}
-				// 				});
+			taskDetail(caseId, taskId) {
 				uni.navigateTo({
 					url: '../../pages/task/task?caseId=' + caseId + '&taskId=' + taskId + '&rwzt=' + this.activeIndex
 				})
-			}
+			},
+			touchStart: function(ev) {
+				ev = ev || event;
+				ev.preventDefault();
+				if (ev.touches.length == 1) { //tounches类数组，等于1时表示此时有只有一只手指在触摸屏幕
+					this.startX = ev.touches[0].clientX; // 记录开始位置
+					this.startY = ev.touches[0].clientY;
+				}
+			},
+			touchMove: function(ev) {
+				ev = ev || event;
+				ev.preventDefault();
+			
+				if (ev.touches.length == 1) {
+					//滑动时距离浏览器左侧的距离
+					this.moveX = ev.touches[0].clientX;
+					this.moveY = ev.touches[0].clientY;
+				}
+			},
+			touchEnd: function(ev) {
+				ev = ev || event;
+				ev.preventDefault();
+			
+				this.disX = this.moveX - this.startX;
+				this.disY = this.moveY - this.startY;
+				if (this.disX < -110) { //向左
+					if (this.activeIndex < 7) {
+						this.activeIndex = this.activeIndex + 1;
+						this.activeTabChange(this.activeIndex);
+					}
+				} else if (this.disX > 110) { //向右
+					if (this.activeIndex > 3) {
+						this.activeIndex = this.activeIndex - 1;
+						this.activeTabChange(this.activeIndex);
+					}
+				}
+				if (this.startY < 120 && this.disY > 100) { //向下滑
+					if (this.currentPage > 1) { // 查询上一页面
+						this.currentPage--;
+						this.getTaskData(this.currentPage, this.pageSize);
+					}
+				} else if (this.startY > 500 && this.disY < -100) { //向上滑
+					if (this.currentPage < this.totalPage) {
+						this.currentPage++;
+						this.getTaskData(this.currentPage, this.pageSize);
+					}
+				}
+			},
 		}
 	}
 </script>
@@ -424,16 +389,15 @@
 		.tabBar {
 			display: flex;
 			justify-content: space-around;
+			padding: 5upx 0;
 
 			.tabBar-item {
 				font-size: 14px;
-				line-height: 20px;
+				line-height: 24px;
 				border: 1px solid #fff;
 				color: #fff;
 				padding: 5upx 22upx;
 				border-radius: 10%;
-				// margin: 0 5upx;
-
 			}
 
 			.tabBar-item.active {

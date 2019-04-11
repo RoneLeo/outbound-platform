@@ -34,6 +34,11 @@ const formateSecond = s => {
     return res;
 }
 
+const formateS = data => {
+	let s = Math.round(data);
+	return formateSecondDigital(s)
+}
+
 const formateMSecond = data => {
 	let s = data / 1000;
     const hour = Math.floor(s / 3600)

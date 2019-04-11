@@ -373,6 +373,9 @@
 	background-color: #00B07B;
 	margin: 10upx 0;
 }
+.audio-box {
+	margin: 10upx;
+}
 
 .audio-icon {
 	align-self: center;

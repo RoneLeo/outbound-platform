@@ -1,6 +1,11 @@
 <template>
 	<view class="page">
-		
+		<view v-show="isNull" class="null-box" >
+			<view class="null-wrapper">
+				<image src="../../static/icon/null.png" class="null-ico"></image>
+				<text class="null-txt">还没有任务哦</text>
+			</view>
+		</view>
 		<view class="page-block index-head">
 			<Swiper></Swiper>
 			<view class="search-block">
@@ -20,6 +25,7 @@
 		
 		<view class="page-block cases-wraper">
 			<view class="cases-item no-border">
+				<view class="appoint-case"></view>
 				<view class="case-txt case-id case-title">
 					任务名称
 				</view>
@@ -35,10 +41,12 @@
 			</view>
 		</view>
 		<view class="page-block">
+			
 			<block v-for="(task, index) in data" :key="index">
 				<navigator open-type="navigate" :url="'/pages/case/case?caseId='+task.ajid + '&taskId=' + task.id + '&rwyj=' + task.rwyj">
 					<view class="cases-item" >
 						<image v-show="task.rwzt==2" src="../../static/icon/zhi.png" class="appoint-case"></image>
+						<view v-show="task.rwzt!=2" class="appoint-case"></view>
 						<view class="case-txt case-id">
 							{{task.rwmc}}
 						</view>
@@ -78,7 +86,8 @@
 				rwfsJson: {},
 				user: {},
 				isEnd: true,
-				searchInput: ''
+				searchInput: '',
+				isNull: false
 			}
 		},
 		onLoad() {
@@ -118,11 +127,13 @@
 		},
 		methods:{
 			getTaskData(page, pagesize) {
+				this.isNull = false;
 				this.$api.post('/task/findAllByYwyqy', {page: page, pagesize: pagesize, ywyid: this.user.id}).then((res)=>{
 					this.data = res.data;
 					this.totalPage = res.totalpage;
 					if(this.totalPage == 0) {
 						this.isEnd = false;
+						this.isNull = true;
 					}
 					this.data.forEach(item => {
 						item.jzrq = item.rwjzsj.substring(0, 11)
@@ -158,6 +169,7 @@
 					this.totalPage = res.totalpage;
 					if(this.totalPage == 0) {
 						this.isEnd = false;
+						this.isNull = true;
 					}
 					this.data.forEach(item => {
 						item.jzrq = item.rwjzsj.substring(0, 11)

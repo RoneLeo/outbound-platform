@@ -47,7 +47,7 @@
 
 		<view class="list" style="margin-top: 30upx;">
 			<view class="list-item" @tap="clearFileList">
-				<view class="list-tt">清除缓存</view>
+				<view class="list-tt">清除文件缓存</view>
 				<!-- <view class="list-td">
 					{{user.mz}}
 					<image src="../../static/icon/right.png" class="list-right"></image>
@@ -87,7 +87,7 @@
 					title:'清除中...',
 					mask: true
 				})
-				uni.clearStorage();
+				// uni.clearStorage();
 				uni.getSavedFileList({
 					success: function(res) {
 						let files = res.fileList;
@@ -103,6 +103,8 @@
 									}
 								});
 							}
+						}else {
+							uni.hideLoading()
 						}
 					}
 				});

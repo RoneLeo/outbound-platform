@@ -7,6 +7,21 @@
 		onShow: function() {
 			// uni.clearStorage();
 			console.log('App Show', this.getGlobalUser(), this.getSessionId())
+			uni.getSavedFileList({   //清空文件的本地缓存
+				success: function(res) {
+					let files = res.fileList;
+					if (files.length > 0) {
+						for(let i = 0; i < files.length; i ++) {
+							uni.removeSavedFile({
+								filePath: files[i].filePath,
+								complete: function(res) {
+									console.log(res);
+								}
+							});
+						}
+					}
+				}
+			});
 			if (this.getGlobalUser() == null || this.getSessionId() == null) {
 				let pages = getCurrentPages();
 				if (pages.length && pages[pages.length - 1].route != 'pages/login/login') { //当前界面不是login.vue
@@ -111,7 +126,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	/*每个页面公共css */
 	.page {
 		width: 100%;
@@ -130,16 +145,16 @@
 		text-overflow: ellipsis;
 	}
 
-	.triangle_border_nw {
-		width: 0;
-		height: 0;
-		border-width: 30px 30px 0 0;
-		border-style: solid;
-		border-color: #6c6 transparent transparent transparent;
-		margin: 40px auto;
-		position: relative;
-	}
-
+// 	.triangle_border_nw {
+// 		width: 0;
+// 		height: 0;
+// 		border-width: 30px 30px 0 0;
+// 		border-style: solid;
+// 		border-color: #6c6 transparent transparent transparent;
+// 		margin: 40px auto;
+// 		position: relative;
+// 	}
+// 
 	.list-item {
 		padding: 20upx 0;
 		display: flex;
@@ -173,5 +188,33 @@
 		color: #ccc;
 		font-size: 12px;
 		letter-spacing: 2upx;
+	}
+
+	.null-box {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		.null-wrapper {
+			display: flex;
+			flex-direction: column;
+
+			.null-ico {
+				width: 120upx;
+				height: 120upx;
+			}
+			.null-txt {
+				font-size: 14px;
+				color: #777;
+			}
+
+			.null-txt,
+			.null-ico {
+				align-self: center;
+			}
+		}
 	}
 </style>

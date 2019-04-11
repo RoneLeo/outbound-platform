@@ -99,7 +99,7 @@
 	
 	import TabBlock from '../../components/tab-block/tab-block'
 	export default {
-		props:['tagTxt', 'caseId', 'taskId'],
+		props:['caseId', 'taskId', 'from'],
 		components: {
 			TabBlock
 		},
@@ -114,9 +114,13 @@
 				basicInfo: {},
 				qtInfo: {},
 				sex: 0, //1是女， 0是男
+				tagTxt: '',
+				taskZTList: ['', '', '', '外访中', '已外访', '未通过', '已通过', '已发放'],
 			};
 		},
 		onLoad(params) {
+			console.log('taskId', this.taskId)
+			console.log('caseId', this.caseId)
 			this.$api.post('/dict/findDictListByZddm', {zddm: 'D_SYS_RWFSDM', zxbz: 0}).then((res)=>{
 				if(res.resCode == 200) {
 					this.rwfsArr = res.data;
@@ -152,6 +156,8 @@
 					if(res.resCode == 200) {
 						this.taskData = res.data;
 						this.rwfs = this.$util.parseJSON(this.taskData.rwfs, this.rwfsArr);
+						
+						this.tagTxt = this.from == 'task' ? '¥' + this.taskData.rwyj : this.taskZTList[this.taskData.rwzt]
 					}else {
 						uni.showToast({
 							title: res.resMsg,
