@@ -83,60 +83,6 @@
             }
         },
         {
-            "path" : "pages/takephoto/takephoto",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "拍照",
-                "navigationBarBackgroundColor" : "#000000",
-                "backgroundColor" : "#000000"
-            }
-        },
-        {
-            "path" : "pages/takevideo/takevideo",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "录像",
-                "navigationBarBackgroundColor" : "#000000",
-                "backgroundColor" : "#000000"
-            }
-        },
-        {
-            "path" : "pages/modifyRadio/modifyRadio",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "修改页面",
-                "navigationBarBackgroundColor" : "#ffd655",
-                "backgroundColor" : "#ffd655",
-                "app-plus" : {
-                    "titleNView" : false
-                }
-            }
-        },
-        {
-            "path" : "pages/modifyTxt/modifyTxt",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "修改页面",
-                "navigationBarBackgroundColor" : "#ffd655",
-                "backgroundColor" : "#ffd655",
-                "app-plus" : {
-                    "titleNView" : false
-                }
-            }
-        },
-        {
-            "path" : "pages/cover/cover",
-            "style" : {
-                "navigationBarTextStyle" : "white",
-                "navigationBarTitleText" : "预览",
-                "navigationBarBackgroundColor" : "#000000",
-                "backgroundColor" : "#000000",
-                "app-plus" : {
-                    "titleNView" : false
-                }
-            }
-        },
-        {
             "path" : "pages/modify/modify",
             "style" : {
                 "navigationBarTextStyle" : "black",

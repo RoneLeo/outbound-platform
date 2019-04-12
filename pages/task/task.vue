@@ -7,27 +7,28 @@
 			</cover-view>
 		</cover-view>
 		<cover-view class="toolbar" v-show="rwzt<4 && toolbarShow">
-			<cover-view class="toolbar-item" @longpress="audioLongTap" @touchstart="audioTouchStart" @touchend="audioTouchEnd">
+			<cover-view class="toolbar-item" @longpress="audioLongTap" @touchstart="audioTouchStart" @touchend="audioTouchEnd"
+			 style="padding: 45upx 0 20upx 0;">
 				<cover-image src="../../static/icon/record.png" class="toolbar-icon"></cover-image>
 				<!-- <cover-view class="toolbar-text">{{txt}}</cover-view> -->
 				<cover-view class="toolbar-text">长按</cover-view>
 				<cover-view class="toolbar-text">录音</cover-view>
 			</cover-view>
-			<cover-view class="toolbar-item" @tap="gotoTakeVideo">
+			<!-- <cover-view class="toolbar-item" @tap="gotoTakeVideo">
 				<cover-image src="../../static/icon/video.png" class="toolbar-icon"></cover-image>
 				<cover-view class="toolbar-text">点击</cover-view>
 				<cover-view class="toolbar-text">录像</cover-view>
-			</cover-view>
+			</cover-view> -->
 			<cover-view class="toolbar-item" @tap="toolBarShowChange">
 				<cover-image src="../../static/icon/down.png" class="toolbar-icon"></cover-image>
 			</cover-view>
 		</cover-view>
 		<view class="cicle-toolbar" v-show="rwzt<4 && !toolbarShow" @tap="toolBarShowChange">
 			<view style="font-size: 12px;font-weight: 300;color: #FFFFFF;">
-				开始
+				录音
 			</view>
 			<view style="font-size: 12px;font-weight: 300;color: #FFFFFF;">
-				外访
+				操作
 			</view>
 		</view>
 
@@ -87,8 +88,13 @@
 					<view class="record-item-tt over-text">视 频</view>
 					<view class="record-item-td media-wrapper">
 						<view class="video-media" v-for="(video, videoIndex) in videoSrcList" :key="videoIndex">
-							<video :src="video" controls></video>
+							<video :src="video" controls>111</video>
 							<cover-image src="../../static/icon/delete.png" class="video-delete" @tap="deleteVideo(videoIndex)" data-imgIndex="videoIndex"></cover-image>
+						</view>
+						<view class="video-media" style="padding: 10upx;align-self: center;height: 65upx;">
+							<view @click="chooseVideo()" style="width: 98%; height: 55upx; display: flex;justify-content: center;align-items: center;border: 1px dashed #ccc;border-radius: 10upx">
+								<image src="../../static/icon/addImg.png" style="width: 30upx; height: 30upx;"></image>
+							</view>
 						</view>
 					</view>
 				</view>
@@ -98,7 +104,7 @@
 		<view v-if="rwzt>3" class="page-block task-info record-block">
 			<view class="block-name">
 				历史催单记录
-				<view class="save-btn" @tap="clearState" style="margin-right: 10upx;">清 空</view>
+				<!-- <view class="save-btn" @tap="clearState" style="margin-right: 10upx;">清 空</view> -->
 			</view>
 			<view class="record-list">
 				<view class="record-item">
@@ -121,15 +127,6 @@
 					<view class="record-item-tt over-text">录 音</view>
 					<view class="record-item-td media-wrapper">
 						<block v-if="feedbackAudios.length">
-							<!-- <view class="audio-box" v-for="(audio, audioIndex) in feedbackAudios" :key="audioIndex">
-								<audio :id="'myAudio' + audioIndex" :name="feedbackTxt.fksj" 
-									@bindplay="playAudio(audioIndex)"
-									@bindpause="pauseAudio(audioIndex)"
-									@binderror="errorAudio(audioIndex)"
-									@bindended="endAudio(audioIndex)"
-									:author="user.mz" :src="'http://www.chiy.online:8083/' +audio.src"  controls loop>
-								</audio>
-							</view> -->
 							<view class="audio-media" v-for="(audio, audioIndex) in feedbackAudios" :key="audioIndex">
 								<image v-show="!audio.isPlaying" src="../../static/icon/play.png" class="audio-icon" @tap="playFeedbackAudio(audioIndex)"></image>
 								<image v-show="audio.isPlaying" src="../../static/icon/pause.png" class="audio-icon" @tap="playFeedbackAudio(audioIndex)"></image>
@@ -137,7 +134,6 @@
 									<progress :percent="audio.percent" stroke-width="3" activeColor="#ffffff" backgroundColor="#aaaaaa" />
 								</view>
 								<view class="audio-length">{{audio.time}}</view>
-								<!-- <image src="../../static/icon/delete.png" class="audio-delete" @tap="deleteAudio(audioIndex)"></image> -->
 							</view>
 						</block>
 					</view>
@@ -157,7 +153,7 @@
 		</view>
 		<view class="page-end">
 			<view class="end-txt">
-				说明：微信小程序的使用内容占用较大，就会闪退，所以，建议录制视频的时长不可过长。
+				说明：建议录制音频的时长不可过长。
 			</view>
 		</view>
 	</view>
@@ -166,7 +162,6 @@
 <script>
 	import BasicCase from '../../components/basic-case/basic-case.vue'
 	import amap from '../../lib/amap-wx.js'
-	// import util from '../../utils/util.js'
 	import HMmessages from '../../components/HM-messages/HM-messages'
 	import { mapState, mapMutations } from 'vuex'
 	
@@ -183,15 +178,16 @@
 					return this.$store.state.formData.audios
 				}
 			},
-			videoSrcList(){
-				return this.$store.state.formData.videos;
+			videoSrcList: {
+				get () {
+					return this.$store.state.formData.videos
+				}
 			},
 			addressName: {
 				get () {
 					return this.$store.state.formData.wz
 				},
 				set (value) {
-					console.log('wz:', value);
 					let temp = Object.assign({}, {wz: value});
 					this.$store.commit('saveFormData', temp)
 				}
@@ -201,7 +197,6 @@
 					return this.$store.state.formData.bz
 				},
 				set (value) {
-					console.log('bz:', value);
 					let temp = Object.assign({}, {bz: value});
 					this.$store.commit('saveFormData', temp)
 				}
@@ -265,7 +260,7 @@
 				this.$api.post('/feedback/findAllByRwid', {rwid: this.taskId}).then(res => {
 					this.feedbackTxt = res.data;
 					if(res.data.fkfj && res.data.fkfj.audio.length) {
-						let audios = res.data.fkfj.audio;
+						let audios = res.data.fkfj &&res.data.fkfj.audio;
 						this.feedbackAudios = audios.map(item => {
 							let strs = item.split('.');
 							let str = strs[strs.length - 2];
@@ -274,14 +269,8 @@
 							console.log('time',str, time);
 							return {src: item, isPlaying: false, percent: 0, time: time ? this.$util.formateMSecond(Math.round(time * 10) / 10):''}
 						})
-						//#ifdef MP-WEIXIN
-// 						this.feedbackCts = this.feedbackAudios.map((item, index) => {
-// 							return wx.createAudioContext('myAudio' + index)
-// 						})
-// 						console.log(this.feedbackCts);
-						//#endif
+						
 					}
-					// this.feedbackAudios = res.data.fkfj && res.data.fkfj.audio;
 				})
 			}
 			
@@ -290,7 +279,10 @@
 			this.feedbackIAC = uni.createInnerAudioContext();
 			
 			this.recorderManager.onError((res) => {
-				console.log('录音错误', res)
+				uni.showToast({
+					title:'录音出错',
+					icon: 'none'
+				})
 			})
 			
 			this.recorderManager.onStop((res) => {
@@ -304,14 +296,17 @@
 						this.audioFileSrcs.push(res.savedFilePath);
 						setTimeout(() => {
 							if (duration < 1000) {
-								console.log('录音时间太短');
+								uni.showToast({
+									title:'录音时长太短',
+									icon: 'none'
+								})
 							} else {
 								let audioSrc = Object.assign({}, {
 										audio: {
 											src: res.savedFilePath,
 											date: this.$util.formatTime(new Date()),
 											duration: duration > 0 ? duration : 0,
-											time: '00:00'
+											time: duration > 0 ? this.$util.formateMSecond(Math.round(duration)) : '00:00'
 										},
 										percent: 0,
 										isPlaying: false
@@ -325,30 +320,16 @@
 						}, 500)
 					},
 					fail: (res) => {
-						console.log('录音文件保存失败')
-					},
-					complete: (res) => {
-						console.log('录音文件保存完成')
+						uni.showToast({
+							title:'录音文件缓存出错',
+							icon: 'none'
+						})
 					}
 				})
 			})
 		},
 		methods:{
 			...mapMutations(['saveFormData', 'resetFormData']),
-// 			playAudio(index) {
-// 				this.feedbackCts[index].play();
-// 			},
-// 			pauseAudio(index) {
-// 				this.feedbackCts[index].pause();
-// 			},
-// 			errorAudio(index) {
-// 				uni.showToast({
-// 					title: '音频播放出错'
-// 				})
-// 			},
-// 			endAudio(index) {
-// 				console.log('音频播放结束', index)
-// 			},
 			playFeedbackAudio(index) {
 				console.log(this.feedbackAudios[index])
 				// let audios = this.feedbackTxt.fkfj.audio;
@@ -363,22 +344,17 @@
 						url: this.$url + '/' + this.feedbackAudios[index].src, //仅为示例，并非真实的资源
 						success: (res) => {
 							if (res.statusCode === 200) {
-								console.log('下载成功');
 								this.feedbackIAC.src = res.tempFilePath;
 								this.feedbackIAC.play();
-								console.log(index, this.feedbackAudios[index],  this.feedbackIAC)
 								this.feedbackIAC.onPlay(() => {
-									console.log('开始播放', this.feedbackIAC.duration)
 									for(let i = 0; i < this.feedbackAudios.length; i ++) {
 										this.feedbackAudios[i].isPlaying = (i!= index) ? false : true;
 									}
 								});
 			
 								this.feedbackIAC.onTimeUpdate(() => {
-									console.log('进度更新', this.feedbackIAC.currentTime, this.feedbackIAC.duration)
 									this.feedbackAudios[index].time = this.$util.formateSecondDigital(Math.round(this.feedbackIAC.currentTime))
 									const time = this.feedbackIAC.currentTime, duration = this.feedbackIAC.duration;
-				
 									this.feedbackAudios[index].percent = (time/duration)*100
 								})
 							}else {
@@ -416,7 +392,6 @@
 						this.audioSrcList[index].isPlaying = false;
 					})
 				}else {
-					console.log(index, this.audioSrcList[index], this.audioFileSrcs[index],  this.innerAudioContext)
 					this.innerAudioContext.src = this.audioFileSrcs[index];
 					this.innerAudioContext.play();
 					
@@ -429,9 +404,6 @@
 					});
 					
 					this.innerAudioContext.onTimeUpdate(() => {
-						console.log('进度更新', this.innerAudioContext.currentTime, this.innerAudioContext.duration, this.audioSrcList[index].audio.duration)
-						// const time = Math.floor(this.audioSrcList[index].audio.duration / 250);
-						// this.audioSrcList[index].percent = this.audioSrcList[index].percent + Math.ceil(100 / time);
 						const time = this.innerAudioContext.currentTime, duration = this.innerAudioContext.duration;
 						this.audioSrcList[index].percent = (time/duration)*100
 					})
@@ -458,63 +430,71 @@
 			},
 			submitFeedbck() {
 				//#ifdef MP-WEIXIN
-				console.log('任务id', this.taskId)
-				const baseUrl = "http://www.chiy.online:8083";
-				const header = {
-					'cookie': 'JSESSIONID=' + uni.getStorageSync("sessionId")
-				}
-				
-				let imgs = this.$store.state.formData.imgs;
-				let videos = this.$store.state.formData.videos;
-				let audios = this.$store.state.formData.audios.map(item => {
-// 					if(item.audio.src.indexOf('durationTime') == -1) {  //必须要把音频时长存在src里面， 拿出来的时候才能知道时长
-// 						let timeStr = 'durationTime='+item.audio.duration;
-// 						let arr = item.audio.src.split('.');
-// 						arr.splice(arr.length - 1, 0, timeStr);
-// 						item.audio.src = arr.join('.')
-// 					}
-					return item.audio.src
-				});
-				const files = [].concat(imgs).concat(videos).concat(audios);
-				console.log('length', files.length, files);
-				
-				uni.showLoading({
-					title: '上传中...',
-					mask: true
-				})
-				for(let i = 0; i < files.length; i ++) {
-						let uploadTask = uni.uploadFile({
-							url: baseUrl + '/file/add', //仅为示例，非真实的接口地址
-							header: header,
-							name: 'file',
-							filePath: files[i],
-							formData: {
-								rwid: this.taskId
-							},
-							success: (res) => {
-								console.log(res, this.$store.state.formData.bz)
-								if(i == files.length - 1) {
-									setTimeout(() => {
-										this.$api.post('/feedback/add', {rwid: this.taskId, fkr: this.user.id, fknr: this.$store.state.formData.bz }).then(res => {
-											uni.hideLoading();
-											if(res.resCode == 200) {
-												this.HMmessages.show('任务反馈成功！', {icon: 'success', closeButton: true, duration: 3000})
-												this.clearState();
-											}else {
-												this.HMmessages.show(res.resMsg, {icon: 'error', closeButton: true, duration: 3000})
-											}
-										})
-									}, 500);
-								}
-							},
-							fail: () => {
-								uni.hideLoading();
+				uni.showModal({
+					title: '提示',
+					content: '是否确定外访任务已完成？',
+					success: (res) => {
+						if (res.confirm) {
+							const baseUrl = "http://www.chiy.online:8083";
+							const header = {
+								'cookie': 'JSESSIONID=' + uni.getStorageSync("sessionId")
 							}
-						});
-						uploadTask.onProgressUpdate((res) => {
-							console.log('第'+ i + '个：' + res.progress, res.totalBytesSent, res.totalBytesExpectedToSend);
-						});
-				}
+							let imgs = this.$store.state.formData.imgs;
+							let videos = this.$store.state.formData.videos;
+							let audios = this.$store.state.formData.audios.map(item => {
+								return item.audio.src
+							});
+							const files = [].concat(imgs).concat(videos).concat(audios);
+							console.log('length', files.length, files);
+            
+							uni.showLoading({
+								title: '上传中...',
+								mask: true
+							})
+							for(let i = 0; i < files.length; i ++) {
+								let uploadTask = uni.uploadFile({
+									url: baseUrl + '/file/add', //仅为示例，非真实的接口地址
+									header: header,
+									name: 'file',
+									filePath: files[i],
+									formData: {
+										rwid: this.taskId
+									},
+									success: (res) => {
+										if(i == files.length - 1) {
+											setTimeout(() => {
+												this.$api.post('/feedback/add', {rwid: this.taskId, fkr: this.user.id, fknr: this.$store.state.formData.bz }).then(res => {
+													uni.hideLoading();
+													if(res.resCode == 200) {
+														this.HMmessages.show('任务反馈成功！', {icon: 'success', closeButton: true, duration: 3000})
+														this.clearState();
+													}else {
+														this.HMmessages.show(res.resMsg, {icon: 'error', closeButton: true, duration: 3000})
+													}
+												})
+											}, 500);
+										}
+									},
+									fail: () => {
+										uni.showToast({
+											title: '上传第' + (i + 1) + '文件时出错',
+											icon: 'none'
+										})
+										uni.hideLoading();
+									}
+								});
+								uploadTask.onProgressUpdate((res) => {
+									// console.log('第'+ i + '个：' + res.progress, res.totalBytesSent, res.totalBytesExpectedToSend);
+								});
+							}
+						} else if (res.cancel) {
+							uni.showToast({
+								title: '取消上传',
+								icon: 'none'
+							})
+						}
+					}
+				});
 				
 				//#endif
 				
@@ -532,7 +512,7 @@
 							for(let i = 0; i < files.length; i ++) {
 								uni.removeSavedFile({
 									filePath: files[i].filePath,
-									complete: function(res) {
+									success: function(res) {
 										if(i == files.length - 1) {
 											uni.hideLoading()
 										}
@@ -598,6 +578,28 @@
 					console.log('recorder start')
 				})
 			},
+			chooseVideo() {
+				uni.chooseVideo({
+					count: 1,
+					sourceType: ['camera', 'album'],
+					success: (res) => {
+						let tempFilePaths = res.tempFilePath;
+						let savedFiles = [];
+						if(tempFilePaths.length) {
+							let tempArr = this.videoSrcList;
+							tempArr = tempArr.concat(tempFilePaths);
+							console.log('视频的路径：', tempFilePaths)
+							this.saveFormData({videos: tempArr});
+						}
+					},
+					fail() {
+						uni.showToast({
+							title: '选择视频出错',
+							icon: 'none'
+						})
+					}
+				});
+			},
 			chooseImg() {
 				uni.chooseImage({
 					count: 9, //默认9
@@ -605,23 +607,17 @@
 					sourceType: ['album', 'camera'], //从相册选择
 					success:  (res) => {
 						let tempFilePaths = res.tempFilePaths;
-						let savedFiles = [];
-						if(tempFilePaths.length) {
-							for(let i = 0; i < tempFilePaths.length; i ++) {
-								uni.saveFile({
-									tempFilePath: tempFilePaths[i],
-									success: (res) => {
-										savedFiles.push(res.savedFilePath);
-										if(i == tempFilePaths.length - 1) {
-											console.log('图片的路径：', savedFiles)
-											let tempArr = this.imgSrcList;
-											tempArr = tempArr.concat(savedFiles);
-											this.saveFormData({imgs: tempArr});
-										}
-									},
-								})
-							}
-						}
+						// let savedFiles = [];
+						console.log('图片的路径：', tempFilePaths)
+						let tempArr = this.imgSrcList;
+						tempArr = tempArr.concat(tempFilePaths);
+						this.saveFormData({imgs: tempArr});
+					},
+					fail() {
+						uni.showToast({
+							title: '选择图片出错',
+							icon: 'none'
+						})
 					}
 				});
 			},
@@ -673,9 +669,6 @@
 					urls: urls
 				})
 				//#endif
-			},
-			tabchange(index, e) {
-				console.log(index)
 			},
 			toolBarShowChange() {
 				this.toolbarShow = !this.toolbarShow

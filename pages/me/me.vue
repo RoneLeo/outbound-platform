@@ -33,17 +33,23 @@
 			</view>
 			<view class="page-block me-list">
 				<view class="me-list-item" @tap="gotoStatistics">
-					<view class="list-tt">案件统计报表</view>
+					<view class="list-tt">案件统计数据</view>
 					<image src="../../static/icon/right.png" class="list-right"></image>
 				</view>
-				<view class="me-list-item">
+				<!-- <view class="me-list-item">
 					<view class="list-tt">案件类型占比</view>
 					<image src="../../static/icon/right.png" class="list-right"></image>
 				</view>
 				<view class="me-list-item">
 					<view class="list-tt">案件趋势分析图表</view>
 					<image src="../../static/icon/right.png" class="list-right"></image>
-				</view>
+				</view> -->
+			</view>
+			<view v-show="!user.id" style="height: auto;display: flex;flex-direction: column;justify-content: space-between;align-items: center; font-size: 32px;font-weight: 400;color: #ebebeb;padding: 20upx 0">
+				<view>Chasing Gold Man.</view>
+				<!-- <view>追</view>
+				<view>金</view>
+				<view>侠</view> -->
 			</view>
 		</view>
 

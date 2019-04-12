@@ -23,17 +23,17 @@
 			<view>
 				<!-- <navigator open-type="navigate" url="/pages/task/task?taskId=1"> -->
 				<view class="case-list-item" v-for="(item, index) in cases" :key="index">
-					<view v-if="item.rwxx.rwzt == 3" class="case-list-item-tag">
+					<view v-if="item.rwxx && item.rwxx.rwzt == 3" class="case-list-item-tag">
 						{{item.rwxx.rwjzsj}}
 					</view>
-					<view v-if="item.rwxx.rwzt !== 1 && item.rwxx.rwzt !== 2 && item.rwxx.rwzt !== 3" class="case-list-item-tag">
+					<view v-if="item.rwxx && item.rwxx.rwzt !== 1 && item.rwxx.rwzt !== 2 && item.rwxx.rwzt !== 3" class="case-list-item-tag">
 						{{item.rwxx.rwzt === 4 ? '请耐心等待审核' : item.rwxx.rwzt === 6 ? '等待发放佣金中...' : '已赚取￥' }}
 					</view>
-					<view v-if="item.rwxx.rwzt === 5" class="case-list-item-tag" style="background: linear-gradient(to left, #FE6756, #F00000)">
+					<view v-if="item.rwxx && item.rwxx.rwzt === 5" class="case-list-item-tag" style="background: linear-gradient(to left, #FE6756, #F00000)">
 						审核不通过
 					</view>
-					<image v-if="item.rwxx.rwzt === 6" src="../../static/icon/yes1.png" class="tag-img"></image>
-					<image v-if="item.rwxx.rwzt === 5" src="../../static/icon/no2.png" class="tag-img"></image>
+					<image v-if="item.rwxx && item.rwxx.rwzt === 6" src="../../static/icon/yes1.png" class="tag-img"></image>
+					<image v-if="item.rwxx && item.rwxx.rwzt === 5" src="../../static/icon/no2.png" class="tag-img"></image>
 					<view class="case-list-item-body" @tap="taskDetail(item.rwxx.ajid, item.rwxx.id)">
 						<view class="case-item-info">
 							<view class="case-item-info-name">
@@ -55,7 +55,7 @@
 					<view class="case-list-item-foot">
 						<view class="case-item-btn">
 							<image src="../../static/icon/money.png" class="btn-img"></image>
-							<view class="btn-txt">￥{{item.rwxx.rwyj}}</view>
+							<view class="btn-txt">￥{{item.rwxx && item.rwxx.rwyj}}</view>
 						</view>
 						<view class="case-item-btn" @tap="makePhoneCall(item.arxx.arsj)">
 							<image src="../../static/icon/phone.png" class="btn-img"></image>
@@ -208,12 +208,12 @@
 			
 				this.disX = this.moveX - this.startX;
 				this.disY = this.moveY - this.startY;
-				if (this.disX < -110) { //向左
+				if (this.disX < -150) { //向左
 					if (this.activeIndex < 7) {
 						this.activeIndex = this.activeIndex + 1;
 						this.activeTabChange(this.activeIndex);
 					}
-				} else if (this.disX > 110) { //向右
+				} else if (this.disX > 150) { //向右
 					if (this.activeIndex > 3) {
 						this.activeIndex = this.activeIndex - 1;
 						this.activeTabChange(this.activeIndex);

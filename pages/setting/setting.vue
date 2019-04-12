@@ -66,7 +66,7 @@
 		</view> -->
 
 		<!-- <view class="logout">
-			<button type="primary" class="logout-btn">退出当前账号</button>
+			<button type="primary" class="logout-btn" @tap="loginout">退出登录</button>
 		</view> -->
 	</view>
 </template>
@@ -82,28 +82,64 @@
 			this.user = this.getGlobalUser();
 		},
 		methods: {
+			loginout() {
+				uni.showModal({
+					title: '提示',
+					content: '是否确定退出登录？',
+					success: (res) => {
+						if (res.confirm) {
+							this.$api.post('/user/outLogin', {
+								id: this.user.id
+							}).then(res => {
+								uni.clearStorage();
+								uni.getSavedFileList({ //清空文件的本地缓存
+									success: function(res) {
+										let files = res.fileList;
+										if (files.length > 0) {
+											for (let i = 0; i < files.length; i++) {
+												uni.removeSavedFile({
+													filePath: files[i].filePath,
+													complete: function(res) {
+													}
+												});
+											}
+										}
+									}
+								});
+								uni.redirectTo({
+									url: '../../pages/login/login'
+								});
+							})
+						} else if (res.cancel) {
+							uni.showToast({
+								title: '已取消退出登录',
+								icon: 'none'
+							})
+						}
+					}
+				});
+
+			},
 			clearFileList() {
 				uni.showLoading({
-					title:'清除中...',
+					title: '清除中...',
 					mask: true
 				})
-				// uni.clearStorage();
 				uni.getSavedFileList({
 					success: function(res) {
 						let files = res.fileList;
 						if (files.length > 0) {
-							for(let i = 0; i < files.length; i ++) {
+							for (let i = 0; i < files.length; i++) {
 								uni.removeSavedFile({
 									filePath: files[i].filePath,
 									complete: function(res) {
-										if(i == files.length - 1) {
+										if (i == files.length - 1) {
 											uni.hideLoading()
 										}
-										console.log(res);
 									}
 								});
 							}
-						}else {
+						} else {
 							uni.hideLoading()
 						}
 					}

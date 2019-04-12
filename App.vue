@@ -7,21 +7,21 @@
 		onShow: function() {
 			// uni.clearStorage();
 			console.log('App Show', this.getGlobalUser(), this.getSessionId())
-			uni.getSavedFileList({   //清空文件的本地缓存
-				success: function(res) {
-					let files = res.fileList;
-					if (files.length > 0) {
-						for(let i = 0; i < files.length; i ++) {
-							uni.removeSavedFile({
-								filePath: files[i].filePath,
-								complete: function(res) {
-									console.log(res);
-								}
-							});
-						}
-					}
-				}
-			});
+// 			uni.getSavedFileList({   //清空文件的本地缓存
+// 				success: function(res) {
+// 					let files = res.fileList;
+// 					if (files.length > 0) {
+// 						for(let i = 0; i < files.length; i ++) {
+// 							uni.removeSavedFile({
+// 								filePath: files[i].filePath,
+// 								complete: function(res) {
+// 									console.log(res);
+// 								}
+// 							});
+// 						}
+// 					}
+// 				}
+// 			});
 			if (this.getGlobalUser() == null || this.getSessionId() == null) {
 				let pages = getCurrentPages();
 				if (pages.length && pages[pages.length - 1].route != 'pages/login/login') { //当前界面不是login.vue
