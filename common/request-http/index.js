@@ -103,6 +103,11 @@ export const post = (url, data) => {
 				duration: 2000,
 				image: "../../static/icon/error.png"
 			})
+		}else {
+			uni.showToast({
+				title: response.errMsg,
+				icon: 'none'
+			})
 		}
 		//判断返回状态 执行相应操作
 

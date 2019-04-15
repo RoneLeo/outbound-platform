@@ -91,7 +91,6 @@
 			})
 		},
 		onShow() {
-			console.log(this.activeIndex)
 			this.currentPage = 1;
 			this.getTaskData(this.currentPage, this.pageSize);
 		},
@@ -362,7 +361,7 @@
 	}
 
 	.case-list.marginTop {
-		padding-top: 140upx;
+		padding-top: 150upx;
 	}
 
 	.tabBar-wrapper {

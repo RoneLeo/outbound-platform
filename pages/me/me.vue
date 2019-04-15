@@ -33,7 +33,7 @@
 			</view>
 			<view class="page-block me-list">
 				<view class="me-list-item" @tap="gotoStatistics">
-					<view class="list-tt">案件统计数据</view>
+					<view class="list-tt">任务数据统计</view>
 					<image src="../../static/icon/right.png" class="list-right"></image>
 				</view>
 				<!-- <view class="me-list-item">
@@ -103,9 +103,9 @@
 				})
 			},
 			gotoStatistics() {
-// 				uni.navigateTo({
-// 					url: '../../pages/caseStatistics/caseStatistics',
-// 				});
+				uni.navigateTo({
+					url: '../../pages/countTask/countTask',
+				});
 			},
 			gotoSetting() {
 				uni.navigateTo({

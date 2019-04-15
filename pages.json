@@ -16,6 +16,7 @@
         {
             "path" : "pages/index/index",
             "style" : {
+				"enablePullDownRefresh": true,
                 "navigationBarTextStyle" : "black",
                 "navigationBarTitleText" : "追金侠",
                 "navigationBarBackgroundColor" : "#FFFFFF",
@@ -90,6 +91,18 @@
                 "navigationBarBackgroundColor" : "#FFFFFF",
                 "backgroundColor" : "#FFFFFF"
             }
+        },
+        {
+            "path" : "pages/countTask/countTask",
+            "style" : {
+				"navigationBarTextStyle" : "white",
+				"navigationBarTitleText" : "",
+				"navigationBarBackgroundColor" : "#ffd655",
+				"backgroundColor" : "#ffd655",
+				"app-plus" : {
+				    "titleNView" : false
+				}
+			}
         }
     ],
     "permission" : {

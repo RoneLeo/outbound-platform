@@ -203,12 +203,13 @@
 			flex-direction: column;
 
 			.null-ico {
-				width: 120upx;
-				height: 120upx;
+				width: 140upx;
+				height: 140upx;
 			}
 			.null-txt {
 				font-size: 14px;
 				color: #777;
+				letter-spacing: 2px;
 			}
 
 			.null-txt,

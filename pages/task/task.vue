@@ -292,7 +292,6 @@
 				uni.saveFile({
 					tempFilePath: tempFilePath,
 					success: (res) => {
-						console.log('录音的路径：', res.savedFilePath)
 						this.audioFileSrcs.push(res.savedFilePath);
 						setTimeout(() => {
 							if (duration < 1000) {
@@ -331,12 +330,9 @@
 		methods:{
 			...mapMutations(['saveFormData', 'resetFormData']),
 			playFeedbackAudio(index) {
-				console.log(this.feedbackAudios[index])
-				// let audios = this.feedbackTxt.fkfj.audio;
 				if(this.feedbackAudios[index].isPlaying) {
 					this.feedbackIAC.stop()
 					this.feedbackIAC.onStop( () => {
-						console.log('stop')
 						this.feedbackAudios[index].isPlaying = false;
 					})
 				}else {
@@ -388,7 +384,6 @@
 				if(this.audioSrcList[index].isPlaying) {
 					this.innerAudioContext.stop()
 					this.innerAudioContext.onStop( () => {
-						console.log('stop')
 						this.audioSrcList[index].isPlaying = false;
 					})
 				}else {
@@ -445,7 +440,6 @@
 								return item.audio.src
 							});
 							const files = [].concat(imgs).concat(videos).concat(audios);
-							console.log('length', files.length, files);
             
 							uni.showLoading({
 								title: '上传中...',
@@ -562,7 +556,6 @@
 			},
 			bindStopAudio() {
 				this.recorderManager.stop();
-				console.log("this.recorderManager.stop")
 			},
 			bindRecordAudio() {
 				const options = { //录音配置选项
@@ -584,17 +577,15 @@
 					sourceType: ['camera', 'album'],
 					success: (res) => {
 						let tempFilePaths = res.tempFilePath;
-						let savedFiles = [];
 						if(tempFilePaths.length) {
 							let tempArr = this.videoSrcList;
 							tempArr = tempArr.concat(tempFilePaths);
-							console.log('视频的路径：', tempFilePaths)
 							this.saveFormData({videos: tempArr});
 						}
 					},
 					fail() {
 						uni.showToast({
-							title: '选择视频出错',
+							title: '未选择到视频',
 							icon: 'none'
 						})
 					}
@@ -607,15 +598,15 @@
 					sourceType: ['album', 'camera'], //从相册选择
 					success:  (res) => {
 						let tempFilePaths = res.tempFilePaths;
-						// let savedFiles = [];
-						console.log('图片的路径：', tempFilePaths)
-						let tempArr = this.imgSrcList;
-						tempArr = tempArr.concat(tempFilePaths);
-						this.saveFormData({imgs: tempArr});
+						if(tempFilePaths.length) {
+							let tempArr = this.imgSrcList;
+							tempArr = tempArr.concat(tempFilePaths);
+							this.saveFormData({imgs: tempArr});
+						}
 					},
 					fail() {
 						uni.showToast({
-							title: '选择图片出错',
+							title: '未选择到图片',
 							icon: 'none'
 						})
 					}
@@ -627,8 +618,6 @@
 					success: (res) => {
 						this.amapPlugin.getRegeo({
 							success: (data) => {  
-								console.log(res)
-								console.log('getRegeo', data);
 								this.addressName = data[0].regeocodeData.formatted_address;  
 							},
 							fail: (info) => {
@@ -656,7 +645,6 @@
 			},
 			previewImgs(index) {
 				//#ifdef APP-PLUS || MP-WEIXIN
-				console.log(index);  
 				var me = this;
 				var imgIndex = index;
 				var newStaffArray = [];
