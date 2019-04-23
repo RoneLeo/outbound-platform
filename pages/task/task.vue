@@ -61,7 +61,9 @@
 					<view class="record-item-td media-wrapper">
 						<view v-for="(img, imgIndex) in imgSrcList" :key="imgIndex" class="img-media-block">
 							<image :src="img" class="img-media" mode="aspectFill"></image>
-							<image src="../../static/icon/deleteImg.png" class="img-delete" @tap="deleteImg(imgIndex)" :data-imgIndex="imgIndex"></image>
+							<view class="img-delete-wrapper">
+								<image src="../../static/icon/deleteImg.png" class="img-delete" @tap="deleteImg(imgIndex)" :data-imgIndex="imgIndex"></image>
+							</view>
 						</view>
 						<view class="img-media" style="padding: 10upx;align-self: center;">
 							<view @click="chooseImg()" style="width: 160upx; height: 235upx; display: flex;justify-content: center;align-items: center;border: 1px dashed #ccc;">

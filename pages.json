@@ -96,7 +96,7 @@
             "path" : "pages/countTask/countTask",
             "style" : {
 				"navigationBarTextStyle" : "white",
-				"navigationBarTitleText" : "",
+				"navigationBarTitleText" : "任务统计",
 				"navigationBarBackgroundColor" : "#ffd655",
 				"backgroundColor" : "#ffd655",
 				"app-plus" : {

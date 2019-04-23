@@ -352,16 +352,24 @@
 	height: 240upx;
 	/* border-radius: 10upx; */
 }
-
-.img-delete {
+.img-delete-wrapper {
 	position: absolute;
-	top: 0;
-	right: -5upx;
+	top: 10upx;
+	right: 0;
+	/* padding: 10px; */
+	width: 40upx;
+	height: 40upx;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(180, 180, 180,.3);
+}
+.img-delete {
 	height: 30upx;
 	width: 30upx;
-	border: 30upx solid transparent;
-	border-right: 10upx solid transparent;
-	border-top: 10upx solid transparent;
+	/* border: 10upx solid transparent; */
+	/* border-right: 10upx solid transparent; */
+	/* border-top: 10upx solid transparent; */
 }
 
 .audio-media {
